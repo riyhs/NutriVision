@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.nutrivision.app.ui.screen.LoginScreen
+import com.nutrivision.app.ui.screen.RegisterScreen
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController
@@ -33,10 +34,9 @@ fun NavGraphBuilder.authNavGraph(
         composable(
             route = Screen.Auth.Register.route
         ) {
-            // Register Screen
-//            RegisterScreen(onNavigateBack = {
-//                navController.navigateUp()
-//            })
+            RegisterScreen(onNavigateBack = {
+                navController.navigateUp()
+            })
         }
     }
 }

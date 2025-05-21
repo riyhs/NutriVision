@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.nutrivision.app.ui.screen.HomeScreen
+import com.nutrivision.app.ui.screen.ProfileScreen
+import com.nutrivision.app.ui.screen.ScanScreen
 
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController
@@ -16,38 +18,29 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Main.Home.route
         ) {
-            HomeScreen(
-                onNavigateToScan = {
-                    navController.navigate(Screen.Main.Scan.route)
-                },
-                onNavigateToProfile = {
-                    navController.navigate(Screen.Main.Profile.route)
-                }
-            )
+            HomeScreen()
         }
 
         composable(
             route = Screen.Main.Scan.route
         ) {
-//            Scan Screen
-//            ScanScreen(onNavigateBack = {
-//                navController.navigateUp()
-//            })
+            ScanScreen(onNavigateBack = {
+                navController.navigateUp()
+            })
         }
 
         composable(
             route = Screen.Main.Profile.route
         ) {
-//            Profile Screen
-//            ProfileScreen(onNavigateBack = {
-//                navController.navigateUp()
-//            })
+            ProfileScreen(onNavigateBack = {
+                navController.navigateUp()
+            })
         }
 
         // route back to auth graph
-        composable(
-            route = Screen.Main.Profile.route
-        ) {
+//        composable(
+//            route = Screen.Main.Profile.route
+//        ) {
 //            ProfileScreen(
 //                navigateToLogin = {
 //                    navController.navigate(Screen.Auth.route) {
@@ -57,7 +50,7 @@ fun NavGraphBuilder.mainNavGraph(
 //                    }
 //                }
 //            )
-        }
+//        }
 
     }
 }

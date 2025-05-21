@@ -7,14 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.nutrivision.app.R
-import com.nutrivision.app.ui.screen.HomeScreen
-import com.nutrivision.app.ui.screen.LoginScreen
 
 
 private object Route {

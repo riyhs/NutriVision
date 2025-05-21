@@ -10,7 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(
+fun ScanScreen(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -22,7 +23,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "HomeScreen",
+                text = "ScanScreen",
                 modifier = modifier
             )
         }
