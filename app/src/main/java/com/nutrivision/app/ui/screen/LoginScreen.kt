@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun LoginScreen(
     onNavigateToHome: () -> Unit,
+    onNavigateToRegister: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
