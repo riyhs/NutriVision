@@ -17,6 +17,7 @@ import com.nutrivision.app.ui.navigation.bottomappbar.BottomBar
 import com.nutrivision.app.ui.navigation.RootNavGraph
 import com.nutrivision.app.ui.navigation.Screen
 import com.nutrivision.app.ui.navigation.topappbar.AppTopBar
+import com.nutrivision.app.ui.navigation.topappbar.ChildAppTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,6 +29,8 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
     val showBottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val showTopBarState = rememberSaveable { (mutableStateOf(true)) }
 
+    val currentScreenTypeState = rememberSaveable { (mutableStateOf("")) }
+
     val topAppBarState = rememberTopAppBarState()
     val topAppBarTitle = rememberSaveable { (mutableStateOf("")) }
     val barScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = topAppBarState)
@@ -37,23 +40,41 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
             showBottomBarState.value = true
             showTopBarState.value = true
             topAppBarTitle.value = "Home"
+            currentScreenTypeState.value = "main"
         }
 
         Screen.Main.Scan.route -> {
             showBottomBarState.value = true
             showTopBarState.value = true
             topAppBarTitle.value = "Scan"
+            currentScreenTypeState.value = "main"
         }
 
         Screen.Main.Profile.route -> {
             showBottomBarState.value = true
             showTopBarState.value = true
             topAppBarTitle.value = "Profile"
+            currentScreenTypeState.value = "main"
+        }
+
+        Screen.Main.History.route -> {
+            showBottomBarState.value = false
+            showTopBarState.value = true
+            topAppBarTitle.value = "Scan History"
+            currentScreenTypeState.value = "child"
+        }
+
+        Screen.Main.BMI.route -> {
+            showBottomBarState.value = false
+            showTopBarState.value = true
+            topAppBarTitle.value = "BMI Calculator"
+            currentScreenTypeState.value = "child"
         }
 
         else -> {
             showBottomBarState.value = false
             showTopBarState.value = false
+            currentScreenTypeState.value = "child"
         }
     }
 
@@ -66,10 +87,18 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
             }
         },
         topBar = {
-            if (showTopBarState.value) {
+            if (showTopBarState.value && currentScreenTypeState.value == "main") {
                 AppTopBar(
                     toolbarTitle = topAppBarTitle.value,
                     barScrollBehavior = barScrollBehavior
+                )
+            } else if (showTopBarState.value && currentScreenTypeState.value == "child") {
+                ChildAppTopBar(
+                    toolbarTitle = topAppBarTitle.value,
+                    barScrollBehavior = barScrollBehavior,
+                    onBackPressed = {
+                        navController.navigateUp()
+                    }
                 )
             }
         }
