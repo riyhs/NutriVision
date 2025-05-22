@@ -23,6 +23,9 @@ private object Route {
     const val HOME = "home"
     const val SCAN = "scan"
     const val PROFILE = "profile"
+
+    const val HISTORY = "history"
+    const val BMI = "bmi"
 }
 
 sealed class TopLevelDestination(
@@ -58,7 +61,11 @@ sealed class Screen(val route: String) {
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home
         )
+
+        object History : Screen(Route.HISTORY)
+        object BMI : Screen(Route.BMI)
     }
+
 }
 
 @Composable
@@ -77,9 +84,11 @@ fun RootNavHost(
 }
 
 @Composable
-fun RootNavGraph(navHostController: NavHostController) {
+fun RootNavGraph(
+    navHostController: NavHostController,
+) {
     RootNavHost(
         navController = navHostController,
-        startDestination = Screen.Auth.route,
+        modifier = Modifier
     )
 }

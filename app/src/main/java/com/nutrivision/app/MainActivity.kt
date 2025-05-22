@@ -12,11 +12,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.nutrivision.app.ui.navigation.BottomBar
-import com.nutrivision.app.ui.navigation.RootNavHost
+import com.nutrivision.app.ui.navigation.RootNavGraph
 import com.nutrivision.app.ui.navigation.Screen
 import com.nutrivision.app.ui.theme.NutriVisionTheme
 
@@ -33,12 +32,10 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
-                val scope = rememberCoroutineScope()
-
                 val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
                 val topBarState = rememberSaveable { (mutableStateOf(true)) }
 
-                when (navBackStackEntry?.destination?.route) {
+                when (currentRoute) {
                     Screen.Main.Home.route -> {
                         bottomBarState.value = true
                         topBarState.value = true
@@ -72,8 +69,8 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        RootNavHost(
-                            navController = navController
+                        RootNavGraph(
+                            navHostController = navController
                         )
                     }
                 }

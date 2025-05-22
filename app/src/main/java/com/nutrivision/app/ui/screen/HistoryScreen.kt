@@ -3,7 +3,6 @@ package com.nutrivision.app.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,9 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(
-    onNavigateToHistory: () -> Unit,
-    onNavigateToBMI: () -> Unit,
+fun HistoryScreen(
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -25,21 +23,9 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "HomeScreen",
+                text = "HistoryScreen",
                 modifier = modifier
             )
-            Button(
-                onClick = { onNavigateToHistory() },
-                modifier = modifier
-            ) {
-                Text(text = "Go to History")
-            }
-            Button(
-                onClick = { onNavigateToBMI() },
-                modifier = modifier
-            ) {
-                Text(text = "Go to BMI")
-            }
         }
     }
 }
