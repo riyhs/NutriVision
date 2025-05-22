@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.nutrivision.app.R
@@ -86,9 +87,11 @@ fun RootNavHost(
 @Composable
 fun RootNavGraph(
     navHostController: NavHostController,
+    startDestination: String = Screen.Auth.route,
 ) {
     RootNavHost(
         navController = navHostController,
+        startDestination = startDestination,
         modifier = Modifier
     )
 }
