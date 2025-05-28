@@ -9,9 +9,11 @@ import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
 import com.nutrivision.app.ui.screen.ScanScreen
+import com.nutrivision.app.ui.screen.ScanViewModel
 
 fun NavGraphBuilder.mainNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    scanViewModel: ScanViewModel
 ) {
     navigation(
         route = Screen.Main.route,
@@ -33,9 +35,12 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Main.Scan.route
         ) {
-            ScanScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+            ScanScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                viewModel = scanViewModel
+            )
         }
 
         composable(

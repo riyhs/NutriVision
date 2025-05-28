@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nutrivision.app.ui.navigation.bottomappbar.BottomBar
@@ -34,6 +35,8 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
     val topAppBarState = rememberTopAppBarState()
     val topAppBarTitle = rememberSaveable { (mutableStateOf("")) }
     val barScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = topAppBarState)
+
+    val scanViewModel: ScanViewModel = viewModel()
 
     when (currentRoute) {
         Screen.Main.Home.route -> {
@@ -109,6 +112,7 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
             RootNavGraph(
                 navHostController = navController,
                 startDestination = if (isAuthenticated) Screen.Main.route else Screen.Auth.route,
+                scanViewModel = scanViewModel
             )
         }
     }

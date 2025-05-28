@@ -45,9 +45,11 @@ import java.util.concurrent.Executors
 @Composable
 fun ScanScreen(
     onNavigateBack: () -> Unit,
+    viewModel: ScanViewModel,
     modifier: Modifier = Modifier
 ) {
     var scannedValue by remember { mutableStateOf<String?>(null) }
+    val productResponse by viewModel.product.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -70,7 +72,16 @@ fun ScanScreen(
                     .padding(0.dp, 16.dp)
             ) {
                 if (scannedValue != null) {
-                    Text("Kode Batang Terpindai: $scannedValue")
+//                    Text("Kode Batang Terpindai: $scannedValue")
+                    viewModel.fetchProductByBarcode(scannedValue.toString())
+                    when (val productResponse = productResponse) {
+                        null -> {
+                            Text("No product information available.")
+                        }
+                        else -> {
+                            Text("Product Name: ${productResponse.product.productName}")
+                        }
+                    }
                 } else {
                     Text("Arahkan kamera ke kode batang...")
                 }
@@ -83,7 +94,7 @@ fun ScanScreen(
 @Composable
 fun BarcodeScannerScreen(
     modifier: Modifier = Modifier,
-    onBarcodeScanned: (String?) -> Unit
+    onBarcodeScanned: (String?) -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
