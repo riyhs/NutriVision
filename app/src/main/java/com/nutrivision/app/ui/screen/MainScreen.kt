@@ -74,6 +74,13 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
             currentScreenTypeState.value = "child"
         }
 
+        Screen.Main.Detail.route -> {
+            showBottomBarState.value = false
+            showTopBarState.value = true
+            topAppBarTitle.value = "Detail Product"
+            currentScreenTypeState.value = "child"
+        }
+
         else -> {
             showBottomBarState.value = false
             showTopBarState.value = false

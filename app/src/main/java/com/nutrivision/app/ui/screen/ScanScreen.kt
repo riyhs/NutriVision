@@ -40,9 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -59,6 +57,7 @@ import java.util.concurrent.Executors
 @Composable
 fun ScanScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToDetail: (String) -> Unit,
     viewModel: ScanViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -94,7 +93,9 @@ fun ScanScreen(
                         ProductCard(
                             product = product.product,
                             productImageUrl = getImageUrl(product.code),
-                            onClick = { /* Navigate to detail page */ }
+                            onClick = {
+                                onNavigateToDetail(product.code.toString())
+                            }
                         )
                     } ?: Text("Informasi produk tidak tersedia")
                 }

@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.nutrivision.app.ui.screen.BMIScreen
+import com.nutrivision.app.ui.screen.DetailScreen
 import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
@@ -39,6 +40,9 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateBack = {
                     navController.navigateUp()
                 },
+                onNavigateToDetail = { productCode ->
+                    navController.navigate("detail/$productCode")
+                },
                 viewModel = scanViewModel
             )
         }
@@ -63,6 +67,16 @@ fun NavGraphBuilder.mainNavGraph(
             route = Screen.Main.BMI.route
         ) {
             BMIScreen(onNavigateBack = {
+                navController.navigateUp()
+            })
+        }
+
+        composable(
+            route = Screen.Main.Detail.route
+        ) { backStackEntry ->
+            val productCode = backStackEntry.arguments?.getString("productCode")
+
+            DetailScreen(productCode = productCode, onNavigateBack = {
                 navController.navigateUp()
             })
         }

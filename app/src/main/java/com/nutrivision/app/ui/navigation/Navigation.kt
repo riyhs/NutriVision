@@ -25,6 +25,7 @@ private object Route {
     const val HOME = "home"
     const val SCAN = "scan"
     const val PROFILE = "profile"
+    const val DETAIL = "detail/{productCode}"
 
     const val HISTORY = "history"
     const val BMI = "bmi"
@@ -66,6 +67,7 @@ sealed class Screen(val route: String) {
 
         object History : Screen(Route.HISTORY)
         object BMI : Screen(Route.BMI)
+        object Detail : Screen(Route.DETAIL)
     }
 
 }
