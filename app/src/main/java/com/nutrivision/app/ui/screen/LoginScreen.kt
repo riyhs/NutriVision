@@ -28,11 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val LightTeal = Color(0xFFE0F7FA)
-val ButtonGradientStart = Color(0xFF26A69A)
-val ButtonGradientEnd = Color(0xFF00ACC1)
-val LinkColor = Color(0xFF00796B)
-val TitleAndWelcomeColor = Color(0xFF186C8B)
 
 @Composable
 fun LoginScreen(
@@ -47,7 +42,7 @@ fun LoginScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = LightTeal
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -67,7 +62,7 @@ fun LoginScreen(
                     text = "Login",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = TitleAndWelcomeColor,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start
                 )
 
@@ -76,7 +71,7 @@ fun LoginScreen(
                 Text(
                     text = "Welcome back! Let's get you healthier.",
                     fontSize = 16.sp,
-                    color = TitleAndWelcomeColor.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Start
                 )
             }
@@ -99,10 +94,10 @@ fun LoginScreen(
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = TitleAndWelcomeColor,
-                    unfocusedBorderColor = TitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = TitleAndWelcomeColor,
-                    cursorColor = TitleAndWelcomeColor
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 ),
                 trailingIcon = {
                     if (email.isNotEmpty()) {
@@ -136,10 +131,10 @@ fun LoginScreen(
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = TitleAndWelcomeColor,
-                    unfocusedBorderColor = TitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = TitleAndWelcomeColor,
-                    cursorColor = TitleAndWelcomeColor
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 )
             )
 
@@ -159,16 +154,12 @@ fun LoginScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(ButtonGradientStart, ButtonGradientEnd)
-                            )
-                        ),
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Login",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -181,7 +172,7 @@ fun LoginScreen(
                 TextButton(onClick = {onNavigateToRegister()}) {
                     Text(
                         text = "Not register yet?",
-                        color = LinkColor,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp
                     )
                 }

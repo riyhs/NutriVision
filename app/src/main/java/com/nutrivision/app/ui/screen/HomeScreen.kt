@@ -28,6 +28,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import com.nutrivision.app.ui.theme.NutriVisionTheme
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -43,11 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import com.nutrivision.app.R
 
-
-val profileBackgroundColor = Color(0xFFD6FFFF)
-val mediumGreen = Color(0xFF52C6A7)
-val darkGreen = Color(0xFF32B591)
-val textGray = Color(0xFF6B7280)
 
 @Composable
 fun HomeScreen(
@@ -60,7 +55,7 @@ fun HomeScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = profileBackgroundColor
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -101,12 +96,12 @@ fun Header() {
                 text = "Hello, Timothy!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF0D473B)
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = "Tap. Scan. Stay healthy.",
                 fontSize = 16.sp,
-                color = textGray
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
             )
         }
         Image(
@@ -125,7 +120,7 @@ fun BMIDisplayCard() {
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = mediumGreen),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
@@ -136,7 +131,7 @@ fun BMIDisplayCard() {
 
             Text(
                 text = "Your Health Overview",
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -169,7 +164,7 @@ fun BMIDisplayCard() {
 
             Text(
                 text = "Height: 178 cm  ·  Updated 2 days ago",
-                color = Color.White.copy(alpha = 0.9f),
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 14.sp
             )
         }
@@ -191,7 +186,7 @@ fun MetricDisplay(
 
         Text(
             text = value,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = valueFontSize,
             fontWeight = FontWeight.Bold,
             lineHeight = (valueFontSize.value * 1.1).sp
@@ -199,7 +194,7 @@ fun MetricDisplay(
 
         Text(
             text = label,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
@@ -207,7 +202,7 @@ fun MetricDisplay(
         if (subLabel.isNotEmpty()) {
             Text(
                 text = subLabel,
-                color = Color.White.copy(alpha = 0.9f),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 16.sp
             )
         }
@@ -225,17 +220,17 @@ fun ScanButton(
             .fillMaxWidth()
             .height(60.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = darkGreen)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         Icon(
             imageVector = Icons.Filled.PhotoCamera ,
             contentDescription = "Scan Icon",
-            tint = Color.White
+            tint = MaterialTheme.colorScheme.onTertiaryContainer
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Scan now!",
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -278,7 +273,7 @@ fun ActionButton(
         onClick = onClick,
         modifier = modifier.height(100.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = darkGreen)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -287,13 +282,13 @@ fun ActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = text,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.size(28.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = text,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
@@ -307,7 +302,7 @@ fun NutritionTipCard() {
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = darkGreen.copy(alpha = 0.8f)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
@@ -317,7 +312,7 @@ fun NutritionTipCard() {
             Icon(
                 imageVector = Icons.Filled.Lightbulb,
                 contentDescription = "Nutrition Tip",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -325,12 +320,12 @@ fun NutritionTipCard() {
                 Text(
                     text = "Daily Nutrition Tip",
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontSize = 16.sp
                 )
                 Text(
                     text = "Eating colorful vegetables ensures a wide range of nutrients",
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 )
