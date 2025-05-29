@@ -1,8 +1,12 @@
 package com.nutrivision.app.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -55,14 +59,14 @@ sealed class Screen(val route: String) {
         object Scan : TopLevelDestination(
             route = Route.SCAN,
             title = R.string.scan,
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
+            selectedIcon = Icons.Filled.CameraAlt,
+            unselectedIcon = Icons.Outlined.CameraAlt
         )
         object Profile : TopLevelDestination(
             route = Route.PROFILE,
             title = R.string.profile,
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
+            selectedIcon = Icons.Filled.Person,
+            unselectedIcon = Icons.Outlined.PersonOutline
         )
 
         object History : Screen(Route.HISTORY)
