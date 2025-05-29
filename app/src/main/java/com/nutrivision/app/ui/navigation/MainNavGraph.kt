@@ -76,9 +76,13 @@ fun NavGraphBuilder.mainNavGraph(
         ) { backStackEntry ->
             val productCode = backStackEntry.arguments?.getString("productCode")
 
-            DetailScreen(productCode = productCode, onNavigateBack = {
-                navController.navigateUp()
-            })
+            DetailScreen(
+                productCode = productCode,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                viewModel = scanViewModel
+            )
         }
 
         // route back to auth graph
