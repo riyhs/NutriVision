@@ -1,5 +1,6 @@
 package com.nutrivision.app.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -45,7 +47,7 @@ fun DetailScreen(
     viewModel: ScanViewModel,
     modifier: Modifier = Modifier
 ) {
-    val productResponse by viewModel.product.collectAsState()
+    val productResponseState by viewModel.product.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var imageUrl by remember { mutableStateOf<String?>(null) }
 
@@ -66,112 +68,192 @@ fun DetailScreen(
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
-        val product = productResponse!!.product
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (imageUrl != null) {
-                SubcomposeAsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "Gambar ${product.productName}",
+        when {
+            isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            productCode == null -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Kode produk tidak tersedia.")
+                }
+            }
+            productResponseState != null  -> {
+                val actualProductResponse = productResponseState!!
+                val product = actualProductResponse.product
+                val imageUrl = getImageUrl(actualProductResponse.code)
+
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Fit,
-                    loading = {
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (imageUrl != null) {
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(imageUrl)
+                                .crossfade(true)
+                                .error(android.R.drawable.ic_menu_gallery)
+                                .build(),
+                            contentDescription = "Gambar ${product.productName}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(250.dp)
+                                .clip(MaterialTheme.shapes.medium),
+                            contentScale = ContentScale.Fit,
+                            loading = {
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    CircularProgressIndicator(modifier = Modifier.size(32.dp))
+                                }
+                            },
+                            error = {
+                                Box(modifier = Modifier.fillMaxWidth().height(250.dp), contentAlignment = Alignment.Center) {
+                                    Text("Gagal memuat gambar", textAlign = TextAlign.Center)
+                                }
+                            }
+                        )
+                    } else {
                         Box(
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxWidth()
+                                .height(250.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                            contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .size(24.dp)
+                            Text("Gambar tidak tersedia", textAlign = TextAlign.Center)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = product.productName,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+
+                    val brandText = product.brandsTags.firstOrNull()
+                        ?.split(":")?.getOrNull(1)?.replace("-", " ")?.trim()
+                        ?: ""
+                    if (brandText.isNotBlank()) {
+                        Text(
+                            text = brandText,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+
+                    product.nutriments.let { nutriments ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    "Informasi Nutrisi (per saji)",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                )
+                                NutrientRow(
+                                    "Energi",
+                                    nutriments.energyKcalServing.toString().toDoubleOrNull(),
+                                    "kcal"
+                                )
+                                NutrientRow(
+                                    "Lemak",
+                                    nutriments.fatServing.toString().toDoubleOrNull(),
+                                    "g"
+                                )
+                                NutrientRow(
+                                    "   Lemak Jenuh",
+                                    nutriments.saturatedFatServing.toString().toDoubleOrNull(),
+                                    "g",
+                                    isSubEntry = true
+                                )
+                                NutrientRow(
+                                    "Karbohidrat",
+                                    nutriments.carbohydratesServing.toString().toDoubleOrNull(),
+                                    "g"
+                                )
+                                NutrientRow(
+                                    "   Gula",
+                                    nutriments.sugarsServing.toString().toDoubleOrNull(),
+                                    "g",
+                                    isSubEntry = true
+                                )
+                                NutrientRow(
+                                    "Protein",
+                                    nutriments.proteinsServing.toString().toDoubleOrNull(),
+                                    "g"
+                                )
+                                NutrientRow(
+                                    "Serat",
+                                    nutriments.fiberServing.toString().toDoubleOrNull(),
+                                    "g"
+                                )
+                                NutrientRow(
+                                    "Garam",
+                                    nutriments.saltServing.toString().toDoubleOrNull(),
+                                    "g"
+                                )
+                            }
+                        }
+                    }
+
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    if (product.nutritionGrades.isNotBlank() && product.nutritionGrades != "?") {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                "Skor Nutri: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = product.nutritionGrades,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = getNutriScoreColor(product.nutritionGrades)
                             )
                         }
-                    },
-                )
-            } else {
-                Box(modifier = Modifier.fillMaxWidth().height(250.dp).align(Alignment.CenterHorizontally), contentAlignment = Alignment.Center) {
-                    Text("Gambar tidak tersedia", textAlign = TextAlign.Center)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Kode Produk: ${actualProductResponse.code}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Nama Produk
-            Text(
-                text = product.productName,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            // Merek Produk
-            if (true) {
-                Text(
-                    text = product.brandsTags[0],
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-
-            // Informasi Nutrisi
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        "Informasi Nutrisi (per saji)",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    NutrientRow("Energi", product.nutriments.energyKcalServing.toDouble(), "kcal")
-                    NutrientRow("Lemak", product.nutriments.fatServing.toDouble(), "g")
-                    NutrientRow("   Lemak Jenuh", product.nutriments.saturatedFatServing, "g", isSubEntry = true)
-                    NutrientRow("Karbohidrat", product.nutriments.carbohydratesServing.toDouble(), "g")
-                    NutrientRow("   Gula", product.nutriments.sugarsServing.toDouble(), "g", isSubEntry = true)
-                    NutrientRow("Protein", product.nutriments.proteinsServing.toDouble(), "g")
-                    NutrientRow("Serat", product.nutriments.fiberServing.toDouble(), "g")
-                    NutrientRow("Garam", product.nutriments.saltServing.toDouble(), "g")
+            else -> {
+                // Kondisi ketika tidak loading, tapi productResponse atau product di dalamnya null
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Detail produk tidak dapat dimuat.")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(onClick = onNavigateBack) {
+                            Text("Kembali")
+                        }
+                    }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Skor Nutri
-            if (product.nutritionGrades != "?") {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        "Skor Nutri: ",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = product.nutritionGrades,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = getNutriScoreColor(product.nutritionGrades)
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Kode Produk: ${productResponse!!.code}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
     }
