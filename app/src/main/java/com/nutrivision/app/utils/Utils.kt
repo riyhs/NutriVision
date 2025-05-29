@@ -16,4 +16,7 @@ object Utils {
 
         return "$baseUrl/$folderName/$filename"
     }
+
+    fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.replaceFirstChar(Char::titlecase) }
+
 }

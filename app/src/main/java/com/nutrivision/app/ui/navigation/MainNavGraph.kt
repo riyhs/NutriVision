@@ -58,9 +58,15 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Main.History.route
         ) {
-            HistoryScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+            HistoryScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToDetail = { productCode ->
+                    navController.navigate("detail/$productCode")
+                },
+                viewModel = scanViewModel
+            )
         }
 
         composable(
