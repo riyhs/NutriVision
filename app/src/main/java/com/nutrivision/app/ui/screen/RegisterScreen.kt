@@ -1,44 +1,290 @@
 package com.nutrivision.app.ui.screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
+val RegisterScreenLightTeal = Color(0xFFE0F7FA)
+val RegisterScreenTitleAndWelcomeColor = Color(0xFF186C8B)
+val RegisterScreenButtonGradientStart = Color(0xFF26A69A)
+val RegisterScreenButtonGradientEnd = Color(0xFF00ACC1)
+val RegisterScreenLinkColor = Color(0xFF00796B)
+val RegisterScreenErrorColor = Color.Red
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onNavigateBack: () -> Unit,
+    onRegisterClicked: (String, String, String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column (
-            modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            Text(
-                text = "Register",
-                modifier = modifier
+    var name by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+
+    var nameError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var confirmPasswordError by remember { mutableStateOf<String?>(null) }
+
+    val focusManager = LocalFocusManager.current
+
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = RegisterScreenLightTeal
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top
+        ) {
+
+            Spacer(modifier = Modifier.height(60.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = "Register",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RegisterScreenTitleAndWelcomeColor,
+                    textAlign = TextAlign.Start
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = "Join now and start living healthier!",
+                    fontSize = 16.sp,
+                    color = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Start
+                )
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it; nameError = null },
+                label = { Text("Name") },
+                placeholder = { Text("") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
+                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
+                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
+                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                ),
+                isError = nameError != null,
+                trailingIcon = {
+                    if (name.isNotEmpty()) {
+                        IconButton(onClick = { name = "" }) {
+                            Icon(imageVector = Icons.Filled.Clear, contentDescription = "Clear name")
+                        }
+                    }
+                }
             )
+            nameError?.let {
+                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it; emailError = null },
+                label = { Text("E-Mail") },
+                placeholder = { Text("example@gmail.com") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
+                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
+                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
+                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                ),
+                isError = emailError != null,
+                trailingIcon = {
+                    if (email.isNotEmpty()) {
+                        IconButton(onClick = { email = "" }) {
+                            Icon(imageVector = Icons.Filled.Clear, contentDescription = "Clear email")
+                        }
+                    }
+                }
+            )
+            emailError?.let {
+                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it; passwordError = null },
+                label = { Text("Password") },
+                placeholder = { Text("") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
+                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
+                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
+                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                ),
+                isError = passwordError != null
+            )
+            passwordError?.let {
+                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it; confirmPasswordError = null },
+                label = { Text("Confirm Password") },
+                placeholder = { Text("") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
+                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
+                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
+                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                ),
+                isError = confirmPasswordError != null
+            )
+            confirmPasswordError?.let {
+                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+            }
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { onNavigateBack() },
-                modifier = modifier
+                onClick = {
+                    focusManager.clearFocus()
+                    var isValid = true
+                    if (name.isBlank()) { nameError = "Name cannot be empty"; isValid = false }
+                    if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { emailError = "Enter a valid email"; isValid = false }
+                    if (password.length < 6) { passwordError = "Password must be at least 6 characters"; isValid = false }
+                    if (password != confirmPassword) { confirmPasswordError = "Passwords do not match"; isValid = false }
+
+                    if (isValid) {
+                        onRegisterClicked(name, email, password, confirmPassword)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues()
             ) {
-                Text(text = "Register")
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(RegisterScreenButtonGradientStart, RegisterScreenButtonGradientEnd)
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Register",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
 
-            Button(
-                onClick = { onNavigateBack() },
-                modifier = modifier
-            ) {
-                Text(text = "Go to Login")
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                TextButton(onClick = { onNavigateBack() }) {
+                    Text(
+                        text = "Already registered?",
+                        color = RegisterScreenLinkColor,
+                        fontSize = 14.sp
+                    )
+                }
             }
+            Spacer(modifier = Modifier.weight(1f))
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    MaterialTheme {
+        RegisterScreen(
+            onNavigateBack = { },
+            onRegisterClicked = { _, _, _, _ -> }
+        )
     }
 }
