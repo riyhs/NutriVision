@@ -36,7 +36,15 @@ fun NavGraphBuilder.authNavGraph(
         ) {
             RegisterScreen(onNavigateBack = {
                 navController.navigateUp()
-            })
+            },
+                onRegisterClicked = { name, email, password, confirmPassword ->
+                    // TODO: Implementasikan logika registrasi Anda di sini.
+                    // Ini biasanya memanggil fungsi pada ViewModel.
+                    println("Registrasi diproses untuk: $email")
+
+                    // Setelah registrasi, kembali ke halaman login.
+                    navController.navigateUp()
+                })
         }
     }
 }
