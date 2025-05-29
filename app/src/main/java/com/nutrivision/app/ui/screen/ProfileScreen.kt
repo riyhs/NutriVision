@@ -19,9 +19,6 @@ import androidx.compose.ui.unit.sp
 import com.nutrivision.app.R
 import com.nutrivision.app.ui.theme.NutriVisionTheme
 
-// Warna untuk screen ini
-private val profileTextColor = Color(0xFF3EB098)
-private val profileLabelColor = Color(0xFF0D473B)
 
 @Composable
 fun ProfileScreen(
@@ -30,7 +27,7 @@ fun ProfileScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = profileBackgroundColor
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = modifier
@@ -81,7 +78,7 @@ fun ProfileImage() {
         modifier = Modifier
             .size(150.dp)
             .border(
-                BorderStroke(4.dp, Color.White),
+                BorderStroke(4.dp, MaterialTheme.colorScheme.secondary),
                 CircleShape
             )
             .padding(4.dp)
@@ -94,12 +91,12 @@ fun InfoItem(label: String, value: String) {
     Column {
         Text(
             text = label,
-            color = profileLabelColor,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 14.sp
         )
         Text(
             text = value,
-            color = profileTextColor,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )

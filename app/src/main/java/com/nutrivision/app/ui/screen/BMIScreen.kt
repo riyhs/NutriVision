@@ -29,14 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.nutrivision.app.ui.theme.NutriVisionTheme
 
 
-// Warna untuk screen ini
-private val darkGreenAccent = Color(0xFF32B591)
-private val genderIconColor = Color(0xFF45B595)
-private val genderUnselectedBg = Color(0xFFD4EFE8)
-private val darkTextColor = Color(0xFF0D473B)
-private val textFieldIndicatorColor = Color(0xFF11755A)
-private val textFieldTextColor = Color(0xFF099D7F)
-
 enum class Gender {
     MALE, FEMALE
 }
@@ -54,7 +46,7 @@ fun BMIScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = profileBackgroundColor
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = modifier
@@ -68,7 +60,7 @@ fun BMIScreen(
                 text = "BMI Calculator",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = darkTextColor,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
@@ -76,7 +68,7 @@ fun BMIScreen(
             Text(
                 text = "Body Mass Index (BMI) adalah cara menghitung berat badan ideal berdasarkan tinggi dan berat badan.",
                 fontSize = 14.sp,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
@@ -127,13 +119,13 @@ fun BMIScreen(
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = darkGreenAccent)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Text(
                     text = "Calculate",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -149,8 +141,8 @@ fun GenderSelectorButton(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val borderColor = if (isSelected) darkGreenAccent else Color.Transparent
-    val backgroundColor = if (isSelected) darkGreenAccent.copy(alpha = 0.1f) else genderUnselectedBg
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,13 +160,13 @@ fun GenderSelectorButton(
                 imageVector = icon,
                 contentDescription = label,
                 modifier = Modifier.size(50.dp),
-                tint = genderIconColor
+                tint = MaterialTheme.colorScheme.primary
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = label,
-            color = darkTextColor,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
         )
     }
@@ -199,14 +191,14 @@ fun CustomInputField(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
 
-            focusedIndicatorColor = textFieldIndicatorColor,
-            unfocusedIndicatorColor = textFieldIndicatorColor.copy(alpha = 0.7f),
+            focusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
 
-            focusedTextColor = textFieldTextColor,
-            unfocusedTextColor = textFieldTextColor,
-            focusedLabelColor = textFieldIndicatorColor,
-            unfocusedLabelColor = textFieldIndicatorColor.copy(alpha = 0.7f),
-            cursorColor = textFieldIndicatorColor
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+            cursorColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }

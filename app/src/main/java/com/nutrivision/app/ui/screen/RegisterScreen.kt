@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -28,12 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-val RegisterScreenLightTeal = Color(0xFFE0F7FA)
-val RegisterScreenTitleAndWelcomeColor = Color(0xFF186C8B)
-val RegisterScreenButtonGradientStart = Color(0xFF26A69A)
-val RegisterScreenButtonGradientEnd = Color(0xFF00ACC1)
-val RegisterScreenLinkColor = Color(0xFF00796B)
-val RegisterScreenErrorColor = Color.Red
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +50,7 @@ fun RegisterScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = RegisterScreenLightTeal
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -77,7 +70,7 @@ fun RegisterScreen(
                     text = "Register",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RegisterScreenTitleAndWelcomeColor,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start
                 )
 
@@ -86,7 +79,7 @@ fun RegisterScreen(
                 Text(
                     text = "Join now and start living healthier!",
                     fontSize = 16.sp,
-                    color = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Start
                 )
             }
@@ -109,10 +102,10 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
-                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
-                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = nameError != null,
                 trailingIcon = {
@@ -124,7 +117,7 @@ fun RegisterScreen(
                 }
             )
             nameError?.let {
-                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -144,10 +137,10 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
-                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
-                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = emailError != null,
                 trailingIcon = {
@@ -159,7 +152,7 @@ fun RegisterScreen(
                 }
             )
             emailError?.let {
-                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -180,15 +173,15 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
-                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
-                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = passwordError != null
             )
             passwordError?.let {
-                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -211,15 +204,15 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = RegisterScreenTitleAndWelcomeColor,
-                    unfocusedBorderColor = RegisterScreenTitleAndWelcomeColor.copy(alpha = 0.5f),
-                    focusedLabelColor = RegisterScreenTitleAndWelcomeColor,
-                    cursorColor = RegisterScreenTitleAndWelcomeColor,
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
+                    focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.onBackground
                 ),
                 isError = confirmPasswordError != null
             )
             confirmPasswordError?.let {
-                Text(text = it, color = RegisterScreenErrorColor, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
+                Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 4.dp, top = 2.dp))
             }
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -246,16 +239,12 @@ fun RegisterScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(RegisterScreenButtonGradientStart, RegisterScreenButtonGradientEnd)
-                            )
-                        ),
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "Register",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -268,7 +257,7 @@ fun RegisterScreen(
                 TextButton(onClick = { onNavigateBack() }) {
                     Text(
                         text = "Already registered?",
-                        color = RegisterScreenLinkColor,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp
                     )
                 }
