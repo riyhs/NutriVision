@@ -3,7 +3,6 @@ package com.nutrivision.app.ui.screen
 import android.Manifest
 import android.content.Context
 import android.util.Log
-import android.view.Surface
 import android.view.ViewGroup
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -12,6 +11,7 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,19 +19,31 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -39,6 +51,8 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.nutrivision.app.data.remote.response.ProductResponse.Product
+import com.nutrivision.app.utils.Utils.getImageUrl
 import java.util.concurrent.Executors
 
 
@@ -50,6 +64,7 @@ fun ScanScreen(
 ) {
     var scannedValue by remember { mutableStateOf<String?>(null) }
     val productResponse by viewModel.product.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +72,7 @@ fun ScanScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp, 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -67,24 +82,24 @@ fun ScanScreen(
                 }
             }
 
-            Box(
-                modifier = modifier
-                    .padding(0.dp, 16.dp)
-            ) {
-                if (scannedValue != null) {
-//                    Text("Kode Batang Terpindai: $scannedValue")
+            if (scannedValue != null) {
+                LaunchedEffect(scannedValue) {
                     viewModel.fetchProductByBarcode(scannedValue.toString())
-                    when (val productResponse = productResponse) {
-                        null -> {
-                            Text("No product information available.")
-                        }
-                        else -> {
-                            Text("Product Name: ${productResponse.product.productName}")
-                        }
-                    }
-                } else {
-                    Text("Arahkan kamera ke kode batang...")
                 }
+
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    productResponse?.let { product ->
+                        ProductCard(
+                            product = product.product,
+                            productImageUrl = getImageUrl(product.code),
+                            onClick = { /* Navigate to detail page */ }
+                        )
+                    } ?: Text("Informasi produk tidak tersedia")
+                }
+            } else {
+                Text("Arahkan kamera ke barcode")
             }
         }
     }
@@ -242,6 +257,64 @@ private class BarcodeAnalyzer(
                 }
         } else {
             imageProxy.close()
+        }
+    }
+}
+
+@Composable
+fun ProductCard(product: Product, productImageUrl: String?, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            SubcomposeAsyncImage(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(productImageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentScale = ContentScale.Crop,
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(24.dp)
+                        )
+                    }
+                },
+                contentDescription = "Image of ${product.productName}",
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = product.productName,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = product.brandsTags[0],
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

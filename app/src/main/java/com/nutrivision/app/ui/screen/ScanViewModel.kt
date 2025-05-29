@@ -1,6 +1,5 @@
 package com.nutrivision.app.ui.screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nutrivision.app.data.remote.response.ProductResponse
@@ -19,17 +18,19 @@ class ScanViewModel @Inject constructor(
     private val _product = MutableStateFlow<ProductResponse?>(null)
     val product: StateFlow<ProductResponse?> = _product
 
-    fun fetchProductByBarcode(barcode: String) {
-        Log.d("ScanViewModel", "Fetch")
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
+    fun fetchProductByBarcode(barcode: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val response = repository.fetchProductByBarcode(barcode)
                 _product.value = response
-                Log.d("ScanViewModel", "Product response: $response")
             } catch (e: Exception) {
                 _product.value = null
-                Log.d("ScanViewModel", "Error: ${e.message.toString()}")
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -9,7 +9,9 @@ interface ApiService {
     @GET("product/{barcode}")
     suspend fun getProductByBarcode(
         @Path("barcode") barcode: String,
-        @Query("fields") fields: String = "product_name,nutriscore_data,nutriments,nutrition_grades"
+        @Query("fields") fields: String = "product_name,nutriscore_data,nutriments,nutrition_grades,images,brands_tags,categories_tags,ecoscore_tags,packaging_tags",
+        @Query("cc") cc: String = "id",
+        @Query("lc") lc: String = "id",
     ): ProductResponse
 
 }
