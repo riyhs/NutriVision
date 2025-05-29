@@ -29,6 +29,9 @@ fun NavGraphBuilder.mainNavGraph(
                 },
                 onNavigateToBMI = {
                     navController.navigate(Screen.Main.BMI.route)
+                },
+                onNavigateToScan = {
+                    navController.navigate(Screen.Main.Scan.route)
                 }
             )
         }
