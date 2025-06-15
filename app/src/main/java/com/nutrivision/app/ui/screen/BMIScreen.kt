@@ -1,5 +1,6 @@
 package com.nutrivision.app.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +34,29 @@ import com.nutrivision.app.ui.theme.NutriVisionTheme
 enum class Gender {
     MALE, FEMALE
 }
+private fun getBmiCategory(bmi: Float, gender: Gender): String {
+    return when (gender) {
+        Gender.FEMALE -> {
+            // Standar Asia-Pasifik (lebih ketat untuk overweight) untuk para ciwi
+            when {
+                bmi < 18.5f -> "Underweight (Kurus)"
+                bmi < 23.0f -> "Normal weight (Normal)"
+                bmi < 25.0f -> "Overweight (Kelebihan berat badan)"
+                else -> "Obesity (Obesitas)"
+            }
+        }
+        Gender.MALE -> {
+            // Standar Internasional WHO untuk lanang
+            when {
+                bmi < 18.5f -> "Underweight (Kurus)"
+                bmi < 25.0f -> "Normal weight (Normal)"
+                bmi < 30.0f -> "Overweight (Kelebihan berat badan)"
+                else -> "Obesity (Obesitas)"
+            }
+        }
+    }
+}
+
 
 @Composable
 fun BMIScreen(
@@ -43,6 +68,11 @@ fun BMIScreen(
     var age by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("") }
     var height by remember { mutableStateOf("") }
+
+    var bmiResult by remember { mutableStateOf<Float?>(null) }
+    var showResultDialog by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -96,25 +126,37 @@ fun BMIScreen(
 
             CustomInputField(
                 value = age,
-                onValueChange = { age = it },
+                onValueChange = { age = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
                 label = "Age (years)"
             )
             Spacer(modifier = Modifier.height(16.dp))
             CustomInputField(
                 value = weight,
-                onValueChange = { weight = it },
+                onValueChange = { weight = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
                 label = "Weight (kg)"
             )
             Spacer(modifier = Modifier.height(16.dp))
             CustomInputField(
                 value = height,
-                onValueChange = { height = it },
+                onValueChange = { height = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
                 label = "Height (cm)"
             )
             Spacer(modifier = Modifier.height(40.dp))
 
             Button(
-                onClick = {  },
+                onClick = {
+                    val weightValue = weight.toFloatOrNull()
+                    val heightValue = height.toFloatOrNull()
+
+                    if (selectedGender != null && weightValue != null && heightValue != null && heightValue > 0) {
+                        val heightInMeters = heightValue / 100
+                        val bmi = weightValue / (heightInMeters * heightInMeters)
+                        bmiResult = bmi
+                        showResultDialog = true
+                    } else {
+                        Toast.makeText(context, "Harap pilih gender dan isi semua data dengan benar.", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -130,9 +172,41 @@ fun BMIScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
+
+        if (showResultDialog) {
+            val category = getBmiCategory(bmiResult ?: 0f, selectedGender!!)
+
+            AlertDialog(
+                onDismissRequest = { showResultDialog = false },
+                title = {
+                    Text(text = "Hasil BMI Anda", fontWeight = FontWeight.Bold)
+                },
+                text = {
+                    Column {
+                        Text(
+                            text = "BMI: ${"%.2f".format(bmiResult)}",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Kategori: $category",
+                            fontSize = 16.sp
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = { showResultDialog = false }
+                    ) {
+                        Text("OK")
+                    }
+                },
+                shape = RoundedCornerShape(16.dp)
+            )
+        }
     }
 }
-
 
 @Composable
 fun GenderSelectorButton(
