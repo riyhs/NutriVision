@@ -15,7 +15,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.nutrivision.app.R
-import com.nutrivision.app.ui.screen.ScanViewModel
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 
 private object Route {

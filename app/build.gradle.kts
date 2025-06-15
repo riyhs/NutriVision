@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     id("kotlin-kapt")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -69,6 +70,7 @@ dependencies {
 
     implementation (libs.retrofit)
     implementation(libs.hilt.android)
+    implementation(libs.firebase.auth)
     kapt(libs.hilt.compiler)
     implementation (libs.converter.gson)
 

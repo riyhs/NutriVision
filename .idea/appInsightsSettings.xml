@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.nutrivision.app" />
+                  <option name="mobileSdkAppId" value="1:497334584574:android:8c37b11585d0f70cdc11af" />
+                  <option name="projectId" value="nutrivision-pab" />
+                  <option name="projectNumber" value="497334584574" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

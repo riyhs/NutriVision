@@ -10,7 +10,7 @@ import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
 import com.nutrivision.app.ui.screen.ScanScreen
-import com.nutrivision.app.ui.screen.ScanViewModel
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController,

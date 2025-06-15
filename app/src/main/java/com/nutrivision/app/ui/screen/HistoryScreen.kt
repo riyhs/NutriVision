@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.nutrivision.app.data.local.entity.ScanHistoryItem
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 @Composable
 fun HistoryScreen(

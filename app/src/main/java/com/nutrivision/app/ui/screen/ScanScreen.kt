@@ -51,6 +51,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.nutrivision.app.data.remote.response.ProductResponse.Product
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 import com.nutrivision.app.utils.Utils.getImageUrl
 import java.util.concurrent.Executors
 

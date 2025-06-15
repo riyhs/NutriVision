@@ -19,6 +19,7 @@ import com.nutrivision.app.ui.navigation.RootNavGraph
 import com.nutrivision.app.ui.navigation.Screen
 import com.nutrivision.app.ui.navigation.topappbar.AppTopBar
 import com.nutrivision.app.ui.navigation.topappbar.ChildAppTopBar
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

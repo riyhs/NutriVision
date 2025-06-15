@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 import com.nutrivision.app.utils.Utils.getImageUrl
 
 @Composable
