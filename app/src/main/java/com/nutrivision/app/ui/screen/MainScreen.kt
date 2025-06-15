@@ -7,11 +7,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nutrivision.app.ui.navigation.bottomappbar.BottomBar
@@ -19,11 +20,19 @@ import com.nutrivision.app.ui.navigation.RootNavGraph
 import com.nutrivision.app.ui.navigation.Screen
 import com.nutrivision.app.ui.navigation.topappbar.AppTopBar
 import com.nutrivision.app.ui.navigation.topappbar.ChildAppTopBar
-import com.nutrivision.app.ui.viewmodel.ScanViewModel
+import com.nutrivision.app.ui.viewmodel.AuthState
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier) {
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val authState by authViewModel.authState.collectAsState()
+    val startDestination = when (authState) {
+        is AuthState.Authenticated -> Screen.Main.route
+        else -> Screen.Auth.route
+    }
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -36,8 +45,6 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
     val topAppBarState = rememberTopAppBarState()
     val topAppBarTitle = rememberSaveable { (mutableStateOf("")) }
     val barScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(state = topAppBarState)
-
-    val scanViewModel: ScanViewModel = viewModel()
 
     when (currentRoute) {
         Screen.Main.Home.route -> {
@@ -119,8 +126,7 @@ fun MainScreen(isAuthenticated: Boolean, modifier: Modifier = Modifier) {
         ) {
             RootNavGraph(
                 navHostController = navController,
-                startDestination = if (isAuthenticated) Screen.Main.route else Screen.Auth.route,
-                scanViewModel = scanViewModel
+                startDestination = startDestination,
             )
         }
     }

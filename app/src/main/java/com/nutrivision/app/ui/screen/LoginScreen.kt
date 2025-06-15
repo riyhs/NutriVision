@@ -27,10 +27,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 @Composable
 fun LoginScreen(
+    authViewModel: AuthViewModel,
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit,
     modifier: Modifier = Modifier
@@ -183,11 +185,11 @@ fun LoginScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(
-        onNavigateToHome = {},
-        onNavigateToRegister = {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun LoginScreenPreview() {
+//    LoginScreen(
+//        onNavigateToHome = {},
+//        onNavigateToRegister = {}
+//    )
+//}

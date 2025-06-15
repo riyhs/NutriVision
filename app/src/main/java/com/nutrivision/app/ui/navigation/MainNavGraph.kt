@@ -1,5 +1,7 @@
 package com.nutrivision.app.ui.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -13,8 +15,7 @@ import com.nutrivision.app.ui.screen.ScanScreen
 import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 fun NavGraphBuilder.mainNavGraph(
-    navController: NavHostController,
-    scanViewModel: ScanViewModel
+    navController: NavHostController
 ) {
     navigation(
         route = Screen.Main.route,
@@ -38,7 +39,12 @@ fun NavGraphBuilder.mainNavGraph(
 
         composable(
             route = Screen.Main.Scan.route
-        ) {
+        ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
+
             ScanScreen(
                 onNavigateBack = {
                     navController.navigateUp()
@@ -60,7 +66,12 @@ fun NavGraphBuilder.mainNavGraph(
 
         composable(
             route = Screen.Main.History.route
-        ) {
+        ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
+
             HistoryScreen(
                 onNavigateBack = {
                     navController.navigateUp()
@@ -83,6 +94,10 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Main.Detail.route
         ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
             val productCode = backStackEntry.arguments?.getString("productCode")
 
             DetailScreen(

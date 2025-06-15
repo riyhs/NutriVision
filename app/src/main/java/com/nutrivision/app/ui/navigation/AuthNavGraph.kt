@@ -1,11 +1,14 @@
 package com.nutrivision.app.ui.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.nutrivision.app.ui.screen.LoginScreen
 import com.nutrivision.app.ui.screen.RegisterScreen
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController
@@ -16,8 +19,14 @@ fun NavGraphBuilder.authNavGraph(
     ) {
         composable(
             route = Screen.Auth.Login.route
-        ) {
+        ) { backStackEntry ->
+            val authNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Auth.route)
+            }
+            val authViewModel: AuthViewModel = hiltViewModel(authNavGraphEntry)
+
             LoginScreen(
+                authViewModel = authViewModel,
                 onNavigateToHome = {
                     navController.navigate(Screen.Main.route) {
                         popUpTo(Screen.Auth.route) {
@@ -33,13 +42,19 @@ fun NavGraphBuilder.authNavGraph(
 
         composable(
             route = Screen.Auth.Register.route
-        ) {
-            RegisterScreen(onNavigateBack = {
-                navController.navigateUp()
-            },
+        ) { backStackEntry ->
+            val authNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Auth.route)
+            }
+            val authViewModel: AuthViewModel = hiltViewModel(authNavGraphEntry)
+
+            RegisterScreen(
+                authViewModel = authViewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
                 onRegisterClicked = { name, email, password, confirmPassword ->
                     // TODO: Implementasikan logika registrasi Anda di sini.
-                    // Ini biasanya memanggil fungsi pada ViewModel.
                     println("Registrasi diproses untuk: $email")
 
                     // Setelah registrasi, kembali ke halaman login.

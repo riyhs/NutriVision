@@ -2,13 +2,16 @@ package com.nutrivision.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor() : ViewModel() {
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
-    private val _authState = MutableStateFlow<AuthState?>(null)
-    val authState: MutableStateFlow<AuthState?> = _authState
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
+    val authState: MutableStateFlow<AuthState> = _authState
 
     init {
         checkAuthStatus()

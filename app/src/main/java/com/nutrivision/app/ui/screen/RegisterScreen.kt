@@ -26,12 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
+    authViewModel: AuthViewModel,
     onNavigateBack: () -> Unit,
     onRegisterClicked: (String, String, String, String) -> Unit,
     modifier: Modifier = Modifier
@@ -267,13 +268,13 @@ fun RegisterScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegisterScreenPreview() {
-    MaterialTheme {
-        RegisterScreen(
-            onNavigateBack = { },
-            onRegisterClicked = { _, _, _, _ -> }
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RegisterScreenPreview() {
+//    MaterialTheme {
+//        RegisterScreen(
+//            onNavigateBack = { },
+//            onRegisterClicked = { _, _, _, _ -> }
+//        )
+//    }
+//}

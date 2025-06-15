@@ -70,6 +70,7 @@ dependencies {
 
     implementation (libs.retrofit)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.firebase.auth)
     kapt(libs.hilt.compiler)
     implementation (libs.converter.gson)
