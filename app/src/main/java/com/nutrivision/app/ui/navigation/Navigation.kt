@@ -14,6 +14,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.nutrivision.app.R
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 private object Route {
@@ -78,14 +79,15 @@ sealed class Screen(val route: String) {
 fun RootNavHost(
     navController: NavHostController,
     startDestination: String = Screen.Auth.route,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        authNavGraph(navController)
-        mainNavGraph(navController)
+        authNavGraph(authViewModel, navController)
+        mainNavGraph(authViewModel, navController)
     }
 }
 
@@ -93,10 +95,12 @@ fun RootNavHost(
 fun RootNavGraph(
     navHostController: NavHostController,
     startDestination: String = Screen.Auth.route,
+    authViewModel: AuthViewModel
 ) {
     RootNavHost(
         navController = navHostController,
         startDestination = startDestination,
+        authViewModel = authViewModel,
         modifier = Modifier
     )
 }

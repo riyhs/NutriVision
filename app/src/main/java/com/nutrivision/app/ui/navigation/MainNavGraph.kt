@@ -12,9 +12,11 @@ import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
 import com.nutrivision.app.ui.screen.ScanScreen
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 fun NavGraphBuilder.mainNavGraph(
+    authViewModel: AuthViewModel,
     navController: NavHostController
 ) {
     navigation(
@@ -59,9 +61,19 @@ fun NavGraphBuilder.mainNavGraph(
         composable(
             route = Screen.Main.Profile.route
         ) {
-            ProfileScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+            ProfileScreen(
+                authViewModel = authViewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(Screen.Main.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable(

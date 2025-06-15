@@ -1,16 +1,24 @@
 package com.nutrivision.app.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,13 +26,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nutrivision.app.R
 import com.nutrivision.app.ui.theme.NutriVisionTheme
+import com.nutrivision.app.ui.viewmodel.AuthState
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 @Composable
 fun ProfileScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
+    val localContext = LocalContext.current
+    val authState = authViewModel.authState.collectAsState()
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Unauthenticated -> onNavigateToLogin()
+            is AuthState.Error -> {
+                Toast.makeText(
+                    localContext,
+                    (authState.value as AuthState.Error).message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            else -> Unit
+        }
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -59,11 +88,13 @@ fun ProfileScreen(
 //                onClick = {  }
 //            )
 //            Spacer(modifier = Modifier.height(16.dp))
-//            ProfileButton(
-//                text = "Log out",
-//                icon = Icons.AutoMirrored.Filled.Logout,
-//                onClick = {  }
-//            )
+            ProfileButton(
+                text = "Log out",
+                icon = Icons.AutoMirrored.Filled.Logout,
+                onClick = {
+                    authViewModel.logout()
+                }
+            )
 
 
         }
@@ -104,47 +135,49 @@ fun InfoItem(label: String, value: String) {
 }
 
 
-// COMING SOON
-//@Composable
-//fun ProfileButton(
-//    text: String,
-//    icon: ImageVector,
-//    onClick: () -> Unit
-//) {
-//    Button(
-//        onClick = onClick,
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(56.dp),
-//        shape = RoundedCornerShape(20.dp),
-//        colors = ButtonDefaults.buttonColors(containerColor = profileAccentColor)
-//    ) {
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Icon(
-//                imageVector = icon,
-//                contentDescription = text,
-//                tint = Color.White
-//            )
-//            Spacer(modifier = Modifier.width(12.dp))
-//            Text(
-//                text = text,
-//                color = Color.White,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.SemiBold
-//            )
-//        }
-//    }
-//}
-
-
-@Preview (showBackground = true)
 @Composable
-fun ProfilePreviewScreen() {
-    NutriVisionTheme { 
-        ProfileScreen(
-            onNavigateBack = {}
+fun ProfileButton(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
         )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
     }
 }
+
+
+//@Preview (showBackground = true)
+//@Composable
+//fun ProfilePreviewScreen() {
+//    NutriVisionTheme {
+//        ProfileScreen(
+//            onNavigateBack = {}
+//        )
+//    }
+//}

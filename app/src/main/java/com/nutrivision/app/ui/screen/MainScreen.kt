@@ -127,6 +127,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             RootNavGraph(
                 navHostController = navController,
                 startDestination = startDestination,
+                authViewModel = authViewModel
             )
         }
     }

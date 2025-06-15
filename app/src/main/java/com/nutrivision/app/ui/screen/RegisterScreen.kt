@@ -1,5 +1,6 @@
 package com.nutrivision.app.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -26,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
@@ -34,7 +37,7 @@ import com.nutrivision.app.ui.viewmodel.AuthViewModel
 fun RegisterScreen(
     authViewModel: AuthViewModel,
     onNavigateBack: () -> Unit,
-    onRegisterClicked: (String, String, String, String) -> Unit,
+    onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var name by rememberSaveable { mutableStateOf("") }
@@ -48,6 +51,22 @@ fun RegisterScreen(
     var confirmPasswordError by remember { mutableStateOf<String?>(null) }
 
     val focusManager = LocalFocusManager.current
+    val localContext = LocalContext.current
+    val authState = authViewModel.authState.collectAsState()
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Authenticated -> onNavigateToHome()
+            is AuthState.Error -> {
+                Toast.makeText(
+                    localContext,
+                    (authState.value as AuthState.Error).message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            else -> Unit
+        }
+    }
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -227,9 +246,10 @@ fun RegisterScreen(
                     if (password != confirmPassword) { confirmPasswordError = "Passwords do not match"; isValid = false }
 
                     if (isValid) {
-                        onRegisterClicked(name, email, password, confirmPassword)
+                        authViewModel.signup(email, password)
                     }
                 },
+                enabled = authState.value != AuthState.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
