@@ -1,6 +1,7 @@
 [versions]
 accompanistPermissions = "0.34.0"
 agp = "8.9.1"
+androidImageCropperVersion = "4.6.0"
 barcodeScanning = "17.3.0"
 cameraCore = "1.4.2"
 cloudinaryAndroid = "2.4.0"
@@ -66,6 +67,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+vanniktech-android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropperVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

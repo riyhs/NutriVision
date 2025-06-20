@@ -103,6 +103,8 @@ dependencies {
 
     implementation(libs.guava)
 
+    implementation(libs.vanniktech.android.image.cropper)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

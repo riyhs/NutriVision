@@ -3,7 +3,6 @@ package com.nutrivision.app.ui.screen
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -31,6 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.nutrivision.app.R
 import com.nutrivision.app.data.model.UserProfile
 import com.nutrivision.app.ui.viewmodel.AuthState
@@ -49,11 +52,28 @@ fun ProfileScreen(
     val userProfile by authViewModel.userProfile.collectAsState()
 
     // Image picker
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            authViewModel.uploadProfileImage(it)
+    val cropOptions = CropImageOptions(
+        aspectRatioX = 1,
+        aspectRatioY = 1,
+        fixAspectRatio = true,
+        imageSourceIncludeGallery = true,
+        imageSourceIncludeCamera = true,
+        outputCompressQuality = 80,
+        guidelines = CropImageView.Guidelines.ON,
+        cornerShape = CropImageView.CropCornerShape.OVAL, // Or RECTANGLE
+        cropShape = CropImageView.CropShape.OVAL // Or RECTANGLE
+    )
+
+    val cropImageLauncher = rememberLauncherForActivityResult(
+        contract = CropImageContract()
+    ) { result ->
+        if (result.isSuccessful) {
+            result.uriContent?.let { uri ->
+                authViewModel.uploadProfileImage(uri)
+            }
+        } else {
+            val exception = result.error
+            Toast.makeText(localContext, "Image cropping failed: ${exception?.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -86,7 +106,8 @@ fun ProfileScreen(
             ProfileImage(
                 userProfile,
                 profileImageClicked = {
-                    imagePickerLauncher.launch("image/*")
+                    val contractOptions = CropImageContractOptions(uri = null, cropImageOptions = cropOptions)
+                    cropImageLauncher.launch(contractOptions)
                 }
             )
             Spacer(modifier = Modifier.height(40.dp))
