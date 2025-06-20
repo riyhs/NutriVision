@@ -35,7 +35,8 @@ fun NavGraphBuilder.mainNavGraph(
                 },
                 onNavigateToScan = {
                     navController.navigate(Screen.Main.Scan.route)
-                }
+                },
+                authViewModel = authViewModel
             )
         }
 

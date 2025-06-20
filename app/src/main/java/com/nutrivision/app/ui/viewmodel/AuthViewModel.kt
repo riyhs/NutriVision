@@ -1,25 +1,30 @@
 package com.nutrivision.app.ui.viewmodel
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cloudinary.Cloudinary
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.nutrivision.app.data.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val cloudinary: Cloudinary
 ) : ViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
     val authState: MutableStateFlow<AuthState> = _authState
@@ -117,15 +122,28 @@ class AuthViewModel @Inject constructor(
     fun uploadProfileImage(uri: Uri) {
         viewModelScope.launch {
             val uid = auth.currentUser?.uid ?: return@launch
-            val storageRef = storage.reference.child("profile_pictures/$uid.jpg")
+
             try {
-                val downloadUrl = storageRef.putFile(uri).await()
-                    .storage.downloadUrl.await()
+                val cloudinaryUrl = withContext(Dispatchers.IO) {
+                    context.contentResolver.openInputStream(uri)?.let { inputStream ->
+                        cloudinary.uploader()
+                            .upload(
+                                inputStream,
+                                mapOf(
+                                    "public_id" to uid,
+                                    "folder" to "profile_pictures",
+                                    "overwrite" to true
+                                )
+                            )
+                            .get("secure_url") as String
+                    } ?: throw Exception("Could not open input stream from URI")
+                }
 
                 firestore.collection("users").document(uid)
-                    .update("photoUrl", downloadUrl.toString()).await()
+                    .update("photoUrl", cloudinaryUrl).await()
 
                 fetchUserProfile(uid)
+
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Image upload failed.")
             }

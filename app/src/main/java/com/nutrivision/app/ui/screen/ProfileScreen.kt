@@ -95,7 +95,7 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Start
             ) {
-                InfoItem(label = "Username", value = userProfile?.displayName ?: "Loading...")
+                InfoItem(label = "Name", value = userProfile?.displayName ?: "Loading...")
                 Spacer(modifier = Modifier.height(24.dp))
                 InfoItem(label = "Email", value = userProfile?.email ?: "Loading...")
                 Spacer(modifier = Modifier.height(24.dp))
