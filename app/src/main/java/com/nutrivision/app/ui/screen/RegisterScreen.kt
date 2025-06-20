@@ -246,7 +246,7 @@ fun RegisterScreen(
                     if (password != confirmPassword) { confirmPasswordError = "Passwords do not match"; isValid = false }
 
                     if (isValid) {
-                        authViewModel.signup(email, password)
+                        authViewModel.signup(name, email, password)
                     }
                 },
                 enabled = authState.value != AuthState.Loading,

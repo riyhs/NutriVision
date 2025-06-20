@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.cloudinary.android)
     kapt(libs.hilt.compiler)
     implementation (libs.converter.gson)
 
@@ -84,6 +86,8 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
 
     implementation(libs.androidx.core.splashscreen)
+
+    implementation(libs.guava)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

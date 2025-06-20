@@ -2,6 +2,9 @@ package com.nutrivision.app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.nutrivision.app.data.local.AppDatabase
 import com.nutrivision.app.data.local.ScanHistoryDao
 import com.nutrivision.app.data.remote.ApiService
@@ -57,4 +60,19 @@ object AppModule {
     fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
         return appDatabase.scanHistoryDao()
     }
+
+    // FIREBASE
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    // Add this to provide FirebaseFirestore
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    // Add this to provide FirebaseStorage
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
 }

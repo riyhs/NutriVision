@@ -1,25 +1,41 @@
 package com.nutrivision.app.ui.viewmodel
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.nutrivision.app.data.model.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : ViewModel() {
-    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
-
+class AuthViewModel @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage
+) : ViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
     val authState: MutableStateFlow<AuthState> = _authState
+
+    private val _userProfile = MutableStateFlow<UserProfile?>(null)
+    val userProfile: StateFlow<UserProfile?> = _userProfile
 
     init {
         checkAuthStatus()
     }
 
     fun checkAuthStatus() {
-        if(auth.currentUser != null){
+        val firebaseUser = auth.currentUser
+        if(firebaseUser != null){
             _authState.value = AuthState.Authenticated
+            fetchUserProfile(firebaseUser.uid)
         }else{
             _authState.value = AuthState.Unauthenticated
         }
@@ -35,16 +51,22 @@ class AuthViewModel @Inject constructor() : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
+                    val uid = task.result?.user?.uid
+                    if (uid != null) {
+                        _authState.value = AuthState.Authenticated
+                        fetchUserProfile(uid)
+                    } else {
+                        _authState.value = AuthState.Error("Could not retrieve user ID.")
+                    }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Login gagal")
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Login failed")
                 }
             }
     }
 
-    fun signup(email: String, password: String) {
-        if(email.isEmpty() || password.isEmpty()){
-            _authState.value = AuthState.Error("Email atau Password tidak boleh kosong")
+    fun signup(name: String, email: String, password: String) {
+        if (name.isBlank() || email.isBlank() || password.isBlank()) {
+            _authState.value = AuthState.Error("All fields are required.")
             return
         }
 
@@ -52,9 +74,25 @@ class AuthViewModel @Inject constructor() : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
+                    val firebaseUser = task.result?.user
+                    firebaseUser?.let { user ->
+                        val newUserProfile = UserProfile(
+                            uid = user.uid,
+                            displayName = name,
+                            email = user.email ?: ""
+                        )
+                        firestore.collection("users").document(user.uid)
+                            .set(newUserProfile)
+                            .addOnSuccessListener {
+                                _authState.value = AuthState.Authenticated
+                                fetchUserProfile(user.uid)
+                            }
+                            .addOnFailureListener { e ->
+                                _authState.value = AuthState.Error(e.message ?: "Failed to save profile.")
+                            }
+                    }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Sign Up gagal")
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Sign Up failed")
                 }
             }
     }
@@ -62,6 +100,36 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     fun logout() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
+    }
+
+    fun fetchUserProfile(uid: String) {
+        viewModelScope.launch {
+            try {
+                val document = firestore.collection("users").document(uid).get().await()
+                val profile = document.toObject(UserProfile::class.java)
+                _userProfile.value = profile
+            } catch (e: Exception) {
+                Log.d("AuthViewModel", e.message.toString())
+            }
+        }
+    }
+
+    fun uploadProfileImage(uri: Uri) {
+        viewModelScope.launch {
+            val uid = auth.currentUser?.uid ?: return@launch
+            val storageRef = storage.reference.child("profile_pictures/$uid.jpg")
+            try {
+                val downloadUrl = storageRef.putFile(uri).await()
+                    .storage.downloadUrl.await()
+
+                firestore.collection("users").document(uid)
+                    .update("photoUrl", downloadUrl.toString()).await()
+
+                fetchUserProfile(uid)
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error(e.message ?: "Image upload failed.")
+            }
+        }
     }
 }
 
