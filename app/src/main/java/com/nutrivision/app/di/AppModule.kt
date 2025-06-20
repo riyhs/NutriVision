@@ -2,6 +2,10 @@ package com.nutrivision.app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.cloudinary.Cloudinary
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.nutrivision.app.BuildConfig
 import com.nutrivision.app.data.local.AppDatabase
 import com.nutrivision.app.data.local.ScanHistoryDao
 import com.nutrivision.app.data.remote.ApiService
@@ -56,5 +60,27 @@ object AppModule {
     @Singleton
     fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
         return appDatabase.scanHistoryDao()
+    }
+
+    // FIREBASE
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    // CLOUDINARY
+    @Provides
+    @Singleton
+    fun provideCloudinary(): Cloudinary {
+        val config = mapOf(
+            "cloud_name" to BuildConfig.CLOUDINARY_CLOUD_NAME,
+            "api_key" to BuildConfig.CLOUDINARY_API_KEY,
+            "api_secret" to BuildConfig.CLOUDINARY_API_SECRET,
+            "secure" to true
+        )
+        return Cloudinary(config)
     }
 }

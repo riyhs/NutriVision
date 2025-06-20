@@ -1,14 +1,15 @@
-package com.nutrivision.app.ui.screen
+package com.nutrivision.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nutrivision.app.data.local.entity.ScanHistoryItem
 import com.nutrivision.app.data.remote.response.ProductResponse
 import com.nutrivision.app.data.repository.ScanRepository
+import com.nutrivision.app.utils.Utils
 import com.nutrivision.app.utils.Utils.capitalizeWords
-import com.nutrivision.app.utils.Utils.getImageUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class ScanViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     val allHistoryItems: StateFlow<List<ScanHistoryItem>> = repository.getAllHistoryItems()
-        .stateIn(viewModelScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun fetchProductByBarcode(barcode: String) {
         viewModelScope.launch {
@@ -40,8 +41,10 @@ class ScanViewModel @Inject constructor(
                         val historyItem = ScanHistoryItem(
                             productCode = response.code.toString(),
                             productName = productDetails.productName,
-                            productBrand = productDetails.brandsTags.firstOrNull()?.split(":")?.getOrNull(1)?.replace("-", " ")?.capitalizeWords() ?: productDetails.brandsTags[0].capitalizeWords().toString(),
-                            imageUrl = getImageUrl(response.code.toString())
+                            productBrand = productDetails.brandsTags.firstOrNull()?.split(":")
+                                ?.getOrNull(1)?.replace("-", " ")?.capitalizeWords()
+                                ?: productDetails.brandsTags[0].capitalizeWords().toString(),
+                            imageUrl = Utils.getImageUrl(response.code.toString())
                         )
                         repository.insertHistoryItem(historyItem)
                     }

@@ -11,11 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.nutrivision.app.R
-import com.nutrivision.app.ui.screen.ScanViewModel
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 private object Route {
@@ -80,15 +79,15 @@ sealed class Screen(val route: String) {
 fun RootNavHost(
     navController: NavHostController,
     startDestination: String = Screen.Auth.route,
-    scanViewModel: ScanViewModel,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        authNavGraph(navController)
-        mainNavGraph(navController, scanViewModel)
+        authNavGraph(authViewModel, navController)
+        mainNavGraph(authViewModel, navController)
     }
 }
 
@@ -96,12 +95,12 @@ fun RootNavHost(
 fun RootNavGraph(
     navHostController: NavHostController,
     startDestination: String = Screen.Auth.route,
-    scanViewModel: ScanViewModel
+    authViewModel: AuthViewModel
 ) {
     RootNavHost(
         navController = navHostController,
         startDestination = startDestination,
-        scanViewModel = scanViewModel,
+        authViewModel = authViewModel,
         modifier = Modifier
     )
 }
