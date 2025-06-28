@@ -65,7 +65,6 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            
             Header()
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -79,7 +78,6 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             NutritionTipCard()
-
         }
     }
 }
