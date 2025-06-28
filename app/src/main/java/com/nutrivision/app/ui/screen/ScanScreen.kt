@@ -50,7 +50,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.nutrivision.app.data.remote.response.ProductResponse.Product
+import com.nutrivision.app.domain.model.Product
 import com.nutrivision.app.ui.viewmodel.ScanViewModel
 import com.nutrivision.app.utils.Utils.getImageUrl
 import java.util.concurrent.Executors
@@ -95,7 +95,7 @@ fun ScanScreen(
                 } else {
                     productResponse?.let { product ->
                         ProductCard(
-                            product = product.product,
+                            product = product,
                             productImageUrl = getImageUrl(product.code),
                             onClick = {
                                 onNavigateToDetail(product.code.toString())
@@ -305,7 +305,7 @@ fun ProductCard(product: Product, productImageUrl: String?, onClick: () -> Unit)
                         )
                     }
                 },
-                contentDescription = "Image of ${product.productName}",
+                contentDescription = "Image of ${product.name}",
             )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -316,11 +316,11 @@ fun ProductCard(product: Product, productImageUrl: String?, onClick: () -> Unit)
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = product.productName,
+                    text = product.name,
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
-                    text = product.brandsTags[0],
+                    text = product.brand ?: "Name merek tidak tersedia",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

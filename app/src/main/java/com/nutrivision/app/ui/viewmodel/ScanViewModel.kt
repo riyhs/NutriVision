@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nutrivision.app.data.local.entity.ScanHistoryItem
 import com.nutrivision.app.data.remote.response.ProductResponse
 import com.nutrivision.app.data.repository.ScanRepository
+import com.nutrivision.app.domain.model.Product
 import com.nutrivision.app.utils.Utils
 import com.nutrivision.app.utils.Utils.capitalizeWords
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,34 +21,24 @@ class ScanViewModel @Inject constructor(
     private val repository: ScanRepository
 ) : ViewModel() {
 
-    private val _product = MutableStateFlow<ProductResponse?>(null)
-    val product: StateFlow<ProductResponse?> = _product
+    private val _product = MutableStateFlow<Product?>(null)
+    val product: StateFlow<Product?> = _product
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    val allHistoryItems: StateFlow<List<ScanHistoryItem>> = repository.getAllHistoryItems()
+    val allHistoryItems: StateFlow<List<Product>> = repository.getAllHistoryItems()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun fetchProductByBarcode(barcode: String) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = repository.fetchProductByBarcode(barcode)
-                _product.value = response
+                val productDomain = repository.fetchProductByBarcode(barcode)
+                _product.value = productDomain
 
-                response.product.let { productDetails ->
-                    if (productDetails.productName.isNotBlank()) {
-                        val historyItem = ScanHistoryItem(
-                            productCode = response.code.toString(),
-                            productName = productDetails.productName,
-                            productBrand = productDetails.brandsTags.firstOrNull()?.split(":")
-                                ?.getOrNull(1)?.replace("-", " ")?.capitalizeWords()
-                                ?: productDetails.brandsTags[0].capitalizeWords().toString(),
-                            imageUrl = Utils.getImageUrl(response.code.toString())
-                        )
-                        repository.insertHistoryItem(historyItem)
-                    }
+                if (productDomain.name.isNotBlank()) {
+                    repository.insertHistoryItem(productDomain)
                 }
 
             } catch (e: Exception) {
