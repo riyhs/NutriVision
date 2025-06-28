@@ -29,6 +29,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +44,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
+import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
+import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 @Composable
@@ -49,9 +55,11 @@ fun HomeScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToBMI: () -> Unit,
     onNavigateToScan: () -> Unit,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val userProfile by authViewModel.userProfile.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -65,7 +73,8 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Header()
+            
+            Header(userProfile)
             Spacer(modifier = Modifier.height(24.dp))
 
             BMIDisplayCard()
@@ -78,12 +87,19 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             NutritionTipCard()
+
         }
     }
 }
 
 @Composable
-fun Header() {
+fun Header(userProfile: UserProfile?) {
+    val painter = if (userProfile?.photoUrl != null) {
+        rememberAsyncImagePainter(userProfile.photoUrl)
+    } else {
+        painterResource(id = R.drawable.ambaronald)
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -91,7 +107,7 @@ fun Header() {
     ) {
         Column {
             Text(
-                text = "Hello, Timothy!",
+                text = "Hello, ${userProfile?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -103,7 +119,7 @@ fun Header() {
             )
         }
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painter,
             contentDescription = "User Avatar",
             modifier = Modifier
                 .size(60.dp)
@@ -335,15 +351,15 @@ fun NutritionTipCard() {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    NutriVisionTheme {
-        HomeScreen(
-            onNavigateToHistory = {},
-            onNavigateToBMI = {},
-            onNavigateToScan = {}
-        )
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    NutriVisionTheme {
+//        HomeScreen(
+//            onNavigateToHistory = {},
+//            onNavigateToBMI = {},
+//            onNavigateToScan = {},
+//        )
+//    }
+//
+//}
