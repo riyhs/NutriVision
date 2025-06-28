@@ -9,7 +9,9 @@ import com.nutrivision.app.BuildConfig
 import com.nutrivision.app.data.local.AppDatabase
 import com.nutrivision.app.data.local.ScanHistoryDao
 import com.nutrivision.app.data.remote.ApiService
+import com.nutrivision.app.data.repository.AuthRepositoryImpl
 import com.nutrivision.app.data.repository.ScanRepository
+import com.nutrivision.app.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +43,17 @@ object AppModule {
         scanHistoryDao: ScanHistoryDao
     ): ScanRepository {
         return ScanRepository(apiService, scanHistoryDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        @ApplicationContext context: Context,
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore,
+        cloudinary: Cloudinary
+    ): AuthRepository {
+        return AuthRepositoryImpl(context, auth, firestore, cloudinary)
     }
 
     // DATA LOCAL

@@ -35,7 +35,7 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.nutrivision.app.R
-import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
@@ -49,7 +49,7 @@ fun ProfileScreen(
 ) {
     val localContext = LocalContext.current
     val authState by authViewModel.authState.collectAsState()
-    val userProfile by authViewModel.userProfile.collectAsState()
+    val user by authViewModel.user.collectAsState()
 
     // Image picker
     val cropOptions = CropImageOptions(
@@ -104,7 +104,7 @@ fun ProfileScreen(
         ) {
 
             ProfileImage(
-                userProfile,
+                user,
                 profileImageClicked = {
                     val contractOptions = CropImageContractOptions(uri = null, cropImageOptions = cropOptions)
                     cropImageLauncher.launch(contractOptions)
@@ -116,9 +116,9 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Start
             ) {
-                InfoItem(label = "Name", value = userProfile?.displayName ?: "Loading...")
+                InfoItem(label = "Name", value = user?.displayName ?: "Loading...")
                 Spacer(modifier = Modifier.height(24.dp))
-                InfoItem(label = "Email", value = userProfile?.email ?: "Loading...")
+                InfoItem(label = "Email", value = user?.email ?: "Loading...")
                 Spacer(modifier = Modifier.height(24.dp))
             }
             Spacer(modifier = Modifier.height(40.dp))
@@ -145,11 +145,11 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileImage(
-    userProfile: UserProfile?,
+    user: User?,
     profileImageClicked: () -> Unit
 ) {
-    val painter = if (userProfile?.photoUrl != null) {
-        rememberAsyncImagePainter(userProfile.photoUrl)
+    val painter = if (user?.photoUrl != null) {
+        rememberAsyncImagePainter(user.photoUrl)
     } else {
         painterResource(id = R.drawable.ambaronald)
     }
