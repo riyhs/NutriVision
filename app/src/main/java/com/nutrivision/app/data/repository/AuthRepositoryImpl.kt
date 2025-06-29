@@ -102,4 +102,26 @@ class AuthRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun updateUserProfile(user: User): Result<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid ?: return Result.failure(Exception("User belum login"))
+
+            val userDataMap = mapOf(
+                "displayName" to user.displayName,
+                "age" to user.age,
+                "gender" to user.gender?.name,
+                "height" to user.height,
+                "weight" to user.weight
+            )
+
+            firestore.collection("users").document(uid)
+                .update(userDataMap)
+                .await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

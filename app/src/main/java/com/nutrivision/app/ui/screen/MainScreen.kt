@@ -89,6 +89,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
             currentScreenTypeState.value = "child"
         }
 
+        Screen.Main.EditProfile.route -> {
+            showBottomBarState.value = false
+            showTopBarState.value = true
+            topAppBarTitle.value = "Ubah Profil"
+            currentScreenTypeState.value = "child"
+        }
+
         else -> {
             showBottomBarState.value = false
             showTopBarState.value = false

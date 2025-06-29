@@ -2,18 +2,23 @@ package com.nutrivision.app.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Face3
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,14 +29,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nutrivision.app.ui.component.GenderSelectorButton
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.utils.Gender
 
 @Composable
 fun EditProfileScreen(
+    authViewModel: AuthViewModel,
     onNavigateBack: () -> Unit
 ) {
-    var height by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
+    val userState by authViewModel.user.collectAsState()
+    val currentUser = userState
+
+    var displayName by remember(currentUser) { mutableStateOf(currentUser?.displayName ?: "") }
+    var height by remember(currentUser) { mutableStateOf(currentUser?.height?.toString() ?: "") }
+    var weight by remember(currentUser) { mutableStateOf(currentUser?.weight?.toString() ?: "") }
+    var age by remember(currentUser) { mutableStateOf(currentUser?.age?.toString() ?: "") }
+    var selectedGender by remember { mutableStateOf<Gender?>(currentUser?.gender) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -46,6 +60,33 @@ fun EditProfileScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                GenderSelectorButton(
+                    icon = Icons.Default.Face,
+                    label = "Male",
+                    isSelected = selectedGender == Gender.MALE,
+                    onClick = { selectedGender = Gender.MALE }
+                )
+                GenderSelectorButton(
+                    icon = Icons.Default.Face3,
+                    label = "Female",
+                    isSelected = selectedGender == Gender.FEMALE,
+                    onClick = { selectedGender = Gender.FEMALE }
+                )
+            }
+
+            OutlinedTextField(
+                value = displayName,
+                onValueChange = { displayName = it },
+                label = { Text("Nama") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             OutlinedTextField(
                 value = height,
@@ -78,6 +119,7 @@ fun EditProfileScreen(
 
             Button(
                 onClick = {
+                    authViewModel.saveUserProfile(displayName, age, selectedGender.toString(), height, weight)
                     onNavigateBack()
                 },
                 modifier = Modifier

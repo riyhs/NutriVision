@@ -87,7 +87,8 @@ fun NavGraphBuilder.mainNavGraph(
             EditProfileScreen(
                 onNavigateBack = {
                     navController.navigateUp()
-                }
+                },
+                authViewModel = authViewModel
             )
         }
 

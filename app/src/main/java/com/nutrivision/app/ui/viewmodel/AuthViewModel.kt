@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.domain.repository.AuthRepository
 import com.nutrivision.app.domain.repository.AuthResult
+import com.nutrivision.app.utils.Gender
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,7 +88,29 @@ class AuthViewModel @Inject constructor(
             if (result.isSuccess) {
                 fetchUserProfile()
             } else {
-                _authState.value = AuthState.Error(result.exceptionOrNull()?.message ?: "Image upload failed")
+                _authState.value = AuthState.Error(result.exceptionOrNull()?.message ?: "Upload gambar profil gagal")
+            }
+        }
+    }
+
+    fun saveUserProfile(displayName: String, age: String, gender: String, height: String, weight: String) {
+        viewModelScope.launch {
+            val currentUser = _user.value ?: return@launch
+
+            val updatedUser = currentUser.copy(
+                displayName = displayName,
+                age = age.toIntOrNull() ?: currentUser.age,
+                gender = Gender.valueOf(gender.uppercase()),
+                height = height.toFloatOrNull() ?: currentUser.height,
+                weight = weight.toFloatOrNull() ?: currentUser.weight
+            )
+
+            val result = repository.updateUserProfile(updatedUser)
+
+            if (result.isSuccess) {
+                _user.value = updatedUser
+            } else {
+                _authState.value = AuthState.Error(result.exceptionOrNull()?.message ?: "Update gagal")
             }
         }
     }
