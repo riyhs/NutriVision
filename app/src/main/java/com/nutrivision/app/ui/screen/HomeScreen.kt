@@ -49,6 +49,8 @@ import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 import com.nutrivision.app.utils.NutritionTips
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
@@ -111,12 +113,12 @@ fun Header(user: User?) {
                 text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.primaryContainer
             )
             Text(
                 text = "Tap. Scan. Stay healthy.",
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
             )
         }
         Image(
@@ -146,7 +148,7 @@ fun BMIDisplayCard() {
 
             Text(
                 text = "Your Health Overview",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -179,7 +181,7 @@ fun BMIDisplayCard() {
 
             Text(
                 text = "Height: 178 cm  ·  Updated 2 days ago",
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp
             )
         }
@@ -196,12 +198,12 @@ fun MetricDisplay(
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.Start // Teks rata kiri
+        horizontalAlignment = Alignment.Start
     ) {
 
         Text(
             text = value,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = valueFontSize,
             fontWeight = FontWeight.Bold,
             lineHeight = (valueFontSize.value * 1.1).sp
@@ -209,7 +211,7 @@ fun MetricDisplay(
 
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
@@ -217,7 +219,7 @@ fun MetricDisplay(
         if (subLabel.isNotEmpty()) {
             Text(
                 text = subLabel,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 16.sp
             )
         }
@@ -235,17 +237,17 @@ fun ScanButton(
             .fillMaxWidth()
             .height(60.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Icon(
             imageVector = Icons.Filled.PhotoCamera ,
             contentDescription = "Scan Icon",
-            tint = MaterialTheme.colorScheme.onTertiaryContainer
+            tint = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Scan now!",
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -288,7 +290,7 @@ fun ActionButton(
         onClick = onClick,
         modifier = modifier.height(100.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -297,13 +299,13 @@ fun ActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = text,
-                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(28.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = text,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
@@ -327,7 +329,7 @@ fun NutritionTipCard() {
             Icon(
                 imageVector = Icons.Filled.Lightbulb,
                 contentDescription = "Nutrition Tip",
-                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -335,12 +337,12 @@ fun NutritionTipCard() {
                 Text(
                     text = "Daily Nutrition Tip",
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 16.sp
                 )
                 Text(
                     text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
-                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 )
@@ -359,7 +361,7 @@ fun NutritionTipCard() {
 //        HomeScreen(
 //            onNavigateToHistory = {},
 //            onNavigateToBMI = {},
-//            onNavigateToScan = {},
+//            onNavigateToScan = {}
 //        )
 //    }
 //

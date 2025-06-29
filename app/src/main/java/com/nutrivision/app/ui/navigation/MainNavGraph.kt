@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.nutrivision.app.ui.screen.BMIScreen
 import com.nutrivision.app.ui.screen.DetailScreen
+import com.nutrivision.app.ui.screen.EditProfileScreen
 import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
@@ -73,6 +74,19 @@ fun NavGraphBuilder.mainNavGraph(
                             inclusive = true
                         }
                     }
+                },
+                onNavigateToEditProfile = {
+                    navController.navigate(Screen.Main.EditProfile.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Main.EditProfile.route
+        ) {
+            EditProfileScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
                 }
             )
         }
