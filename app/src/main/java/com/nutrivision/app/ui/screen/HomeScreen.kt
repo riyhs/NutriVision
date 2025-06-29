@@ -10,9 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,25 +23,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
-import com.nutrivision.app.ui.theme.NutriVisionTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,7 +44,6 @@ import androidx.compose.ui.unit.TextUnit
 import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
-import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 import com.nutrivision.app.utils.BMI.calculateBMI
 import com.nutrivision.app.utils.BMI.getBmiCategory
@@ -89,9 +79,6 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             BMIDisplayCard(user)
-            Spacer(modifier = Modifier.height(24.dp))
-
-            ScanButton(onNavigateToScan = onNavigateToScan)
             Spacer(modifier = Modifier.height(24.dp))
 
             ActionButtons(onNavigateToBMI = onNavigateToBMI,onNavigateToHistory = onNavigateToHistory)
@@ -243,36 +230,6 @@ fun MetricDisplay(
                 fontSize = 16.sp
             )
         }
-    }
-}
-
-
-@Composable
-fun ScanButton(
-    onNavigateToScan: () -> Unit
-) {
-    Button(
-        onClick = { onNavigateToScan() },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .clip(RoundedCornerShape(12.dp)),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        contentPadding = PaddingValues()
-    ) {
-        Icon(
-            imageVector = Icons.Filled.PhotoCamera ,
-            contentDescription = "Scan Icon",
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = "Scan Yuk!",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium
-        )
     }
 }
 
