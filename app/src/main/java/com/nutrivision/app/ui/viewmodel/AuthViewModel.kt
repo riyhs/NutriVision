@@ -1,25 +1,15 @@
 package com.nutrivision.app.ui.viewmodel
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cloudinary.Cloudinary
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.nutrivision.app.data.model.UserProfile
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.domain.repository.AuthRepository
 import com.nutrivision.app.domain.repository.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel

@@ -37,7 +37,7 @@ object AppModule {
             .create(ApiService::class.java)
     }
 
-    // Repository
+    // REPOSITORY
     @Provides
     @Singleton
     fun provideScanRepository(
@@ -56,25 +56,6 @@ object AppModule {
         cloudinary: Cloudinary
     ): AuthRepository {
         return AuthRepositoryImpl(context, auth, firestore, cloudinary)
-    }
-
-    // DATA LOCAL
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            "scan_history_database"
-        )
-            .fallbackToDestructiveMigration(true)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
-        return appDatabase.scanHistoryDao()
     }
 
     // FIREBASE
@@ -97,5 +78,24 @@ object AppModule {
             "secure" to true
         )
         return Cloudinary(config)
+    }
+
+    // DATA LOCAL
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "scan_history_database"
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
+        return appDatabase.scanHistoryDao()
     }
 }

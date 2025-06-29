@@ -5,7 +5,7 @@ import android.net.Uri
 import com.cloudinary.Cloudinary
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.data.firebase.UserProfile
 import com.nutrivision.app.domain.mapper.toDomain
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.domain.repository.AuthRepository

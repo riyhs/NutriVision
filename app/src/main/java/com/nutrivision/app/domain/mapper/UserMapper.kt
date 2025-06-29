@@ -1,6 +1,6 @@
 package com.nutrivision.app.domain.mapper
 
-import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.data.firebase.UserProfile
 import com.nutrivision.app.domain.model.User
 
 // Fungsi untuk mengubah UserProfile (dari Firebase) menjadi User (Domain Model)

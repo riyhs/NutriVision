@@ -1,4 +1,4 @@
-package com.nutrivision.app.data.model
+package com.nutrivision.app.data.firebase
 
 import com.google.firebase.Timestamp
 
