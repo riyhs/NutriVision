@@ -10,6 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +30,7 @@ import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
@@ -40,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.nutrivision.app.ui.theme.NutriVisionTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +53,7 @@ import androidx.compose.ui.unit.TextUnit
 import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
+import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 import com.nutrivision.app.utils.BMI.calculateBMI
 import com.nutrivision.app.utils.BMI.getBmiCategory
@@ -246,24 +252,26 @@ fun ScanButton(
     onNavigateToScan: () -> Unit
 ) {
     Button(
-        onClick = {  onNavigateToScan()  },
+        onClick = { onNavigateToScan() },
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+            .height(50.dp)
+            .clip(RoundedCornerShape(12.dp)),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        contentPadding = PaddingValues()
     ) {
         Icon(
             imageVector = Icons.Filled.PhotoCamera ,
             contentDescription = "Scan Icon",
-            tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = "Scan Yuk!",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Medium
         )
     }
 }

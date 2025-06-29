@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -220,23 +221,22 @@ fun ProfileButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
-        shape = RoundedCornerShape(20.dp),
+            .height(50.dp)
+            .clip(RoundedCornerShape(12.dp)),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor
-        )
+        ),
     ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = text
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = text,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-
+        Icon(
+            imageVector = icon,
+            contentDescription = text,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = text,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
