@@ -39,8 +39,6 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
-import com.nutrivision.app.data.model.UserProfile
-import com.nutrivision.app.ui.theme.NutriVisionTheme
 import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
