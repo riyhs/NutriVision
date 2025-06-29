@@ -48,6 +48,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.utils.NutritionTips
 
 
 @Composable
@@ -338,7 +339,7 @@ fun NutritionTipCard() {
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Eating colorful vegetables ensures a wide range of nutrients",
+                    text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
                     color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp
