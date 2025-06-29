@@ -120,7 +120,7 @@ fun Header(user: User?) {
             modifier = Modifier.weight(0.7.toFloat()),
         ) {
             Text(
-                text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
+                text = "Halo, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
