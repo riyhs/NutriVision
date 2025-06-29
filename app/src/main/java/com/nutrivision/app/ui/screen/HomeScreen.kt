@@ -43,11 +43,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.utils.BMI.calculateBMI
+import com.nutrivision.app.utils.BMI.getBmiCategory
+import com.nutrivision.app.utils.Gender
 import com.nutrivision.app.utils.NutritionTips
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,7 +66,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val userProfile by authViewModel.user.collectAsState()
+    val user by authViewModel.user.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -76,11 +80,11 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            
-            Header(userProfile)
+            Spacer(modifier = Modifier.height(32.dp))
+            Header(user)
             Spacer(modifier = Modifier.height(24.dp))
 
-            BMIDisplayCard()
+            BMIDisplayCard(user)
             Spacer(modifier = Modifier.height(24.dp))
 
             ScanButton(onNavigateToScan = onNavigateToScan)
@@ -89,8 +93,8 @@ fun HomeScreen(
             ActionButtons(onNavigateToBMI = onNavigateToBMI,onNavigateToHistory = onNavigateToHistory)
             Spacer(modifier = Modifier.height(24.dp))
 
-            NutritionTipCard()
-
+            NutritionTipCard(user)
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -108,11 +112,15 @@ fun Header(user: User?) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column(
+            modifier = Modifier.weight(0.7.toFloat()),
+        ) {
             Text(
                 text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
@@ -132,7 +140,7 @@ fun Header(user: User?) {
 }
 
 @Composable
-fun BMIDisplayCard() {
+fun BMIDisplayCard(user: User?) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -160,16 +168,24 @@ fun BMIDisplayCard() {
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
+                var bmi = 0.0.toFloat()
+                var category = "Tidak ada data"
 
+                if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
+                    if (user.gender != Gender.NODATA) {
+                        bmi = calculateBMI(user.weight, user.height)
+                        category = getBmiCategory(bmi, user.gender)
+                    }
+                }
                 MetricDisplay(
-                    value = "23.5",
+                    value = bmi.toString(),
                     label = "BMI Saat ini",
-                    subLabel = "BB Normal",
+                    subLabel = category,
                     modifier = Modifier.weight(1f),
                 )
 
                 MetricDisplay(
-                    value = "75 kg",
+                    value = user?.weight.toString() + " kg",
                     label = "Berat Badanmu",
                     subLabel = "",
                     modifier = Modifier.weight(1f),
@@ -180,7 +196,7 @@ fun BMIDisplayCard() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Tingi Badan: 178 cm  ·  Diperbarui 2 hari yang lalu",
+                text = "Height: ${user?.height} cm",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 12.sp
             )
@@ -314,7 +330,7 @@ fun ActionButton(
 }
 
 @Composable
-fun NutritionTipCard() {
+fun NutritionTipCard(user: User?) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -340,8 +356,15 @@ fun NutritionTipCard() {
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontSize = 16.sp
                 )
+
+                var tipsText = "Eating colorful vegetables ensures a wide range of nutrients"
+                if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
+                    val bmiCategory = getBmiCategory(calculateBMI(user.weight, user.height), user.gender)
+                    tipsText = NutritionTips.getRandomTipBasedOnBMI(bmiCategory)
+                }
+
                 Text(
-                    text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
+                    text = tipsText,
                     color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp

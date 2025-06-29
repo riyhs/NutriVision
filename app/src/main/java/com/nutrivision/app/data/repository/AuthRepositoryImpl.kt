@@ -10,6 +10,7 @@ import com.nutrivision.app.domain.mapper.toDomain
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.domain.repository.AuthRepository
 import com.nutrivision.app.domain.repository.AuthResult
+import com.nutrivision.app.utils.Gender
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +54,11 @@ class AuthRepositoryImpl @Inject constructor(
             val newUserProfile = UserProfile(
                 uid = firebaseUser.uid,
                 displayName = name,
-                email = firebaseUser.email ?: ""
+                email = firebaseUser.email ?: "",
+                gender = Gender.NODATA.name,
+                weight = 0.toFloat(),
+                height = 0.toFloat(),
+                age = 0
             )
             firestore.collection("users").document(firebaseUser.uid).set(newUserProfile).await()
             emit(AuthResult.Success(newUserProfile.toDomain()))
@@ -98,6 +103,28 @@ class AuthRepositoryImpl @Inject constructor(
                 .update("photoUrl", cloudinaryUrl).await()
 
             Result.success(cloudinaryUrl)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateUserProfile(user: User): Result<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid ?: return Result.failure(Exception("User belum login"))
+
+            val userDataMap = mapOf(
+                "displayName" to user.displayName,
+                "age" to user.age,
+                "gender" to user.gender?.name,
+                "height" to user.height,
+                "weight" to user.weight
+            )
+
+            firestore.collection("users").document(uid)
+                .update(userDataMap)
+                .await()
+
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

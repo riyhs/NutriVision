@@ -9,7 +9,7 @@ data class UserProfile(
     val photoUrl: String? = null,
     val age: Int? = null,
     val gender: String? = null,
-    val height: Int? = null,
-    val weight: Int? = null,
+    val height: Float? = null,
+    val weight: Float? = null,
     val createdAt: Timestamp = Timestamp.now()
 )

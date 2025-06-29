@@ -1,13 +1,8 @@
 package com.nutrivision.app.ui.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -18,9 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,34 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nutrivision.app.ui.component.GenderSelectorButton
 import com.nutrivision.app.ui.theme.NutriVisionTheme
-
-
-enum class Gender {
-    MALE, FEMALE
-}
-private fun getBmiCategory(bmi: Float, gender: Gender): String {
-    return when (gender) {
-        Gender.FEMALE -> {
-            // Standar Asia-Pasifik (lebih ketat untuk overweight) untuk para ciwi
-            when {
-                bmi < 18.5f -> "Underweight (Kurus)"
-                bmi < 23.0f -> "Normal weight (Normal)"
-                bmi < 25.0f -> "Overweight (Kelebihan berat badan)"
-                else -> "Obesity (Obesitas)"
-            }
-        }
-        Gender.MALE -> {
-            // Standar Internasional WHO untuk lanang
-            when {
-                bmi < 18.5f -> "Underweight (Kurus)"
-                bmi < 25.0f -> "Normal weight (Normal)"
-                bmi < 30.0f -> "Overweight (Kelebihan berat badan)"
-                else -> "Obesity (Obesitas)"
-            }
-        }
-    }
-}
+import com.nutrivision.app.utils.BMI.calculateBMI
+import com.nutrivision.app.utils.BMI.getBmiCategory
+import com.nutrivision.app.utils.Gender
 
 
 @Composable
@@ -149,9 +119,7 @@ fun BMIScreen(
                     val heightValue = height.toFloatOrNull()
 
                     if (selectedGender != null && weightValue != null && heightValue != null && heightValue > 0) {
-                        val heightInMeters = heightValue / 100
-                        val bmi = weightValue / (heightInMeters * heightInMeters)
-                        bmiResult = bmi
+                        bmiResult = calculateBMI(weightValue, heightValue)
                         showResultDialog = true
                     } else {
                         Toast.makeText(context, "Harap pilih gender dan isi semua data dengan benar.", Toast.LENGTH_SHORT).show()
@@ -205,44 +173,6 @@ fun BMIScreen(
                 shape = RoundedCornerShape(16.dp)
             )
         }
-    }
-}
-
-@Composable
-fun GenderSelectorButton(
-    icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable(onClick = onClick)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(90.dp)
-                .clip(CircleShape)
-                .background(backgroundColor)
-                .border(BorderStroke(2.dp, borderColor), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                modifier = Modifier.size(50.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = label,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-        )
     }
 }
 

@@ -11,6 +11,7 @@ interface AuthRepository {
     fun logout()
     suspend fun getUserProfile(): User?
     suspend fun uploadProfileImage(uri: Uri): Result<String>
+    suspend fun updateUserProfile(user: User): Result<Unit>
 }
 
 sealed class AuthResult {
