@@ -277,12 +277,12 @@ fun CustomInputField(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BMIPreviewScreen(){
-    NutriVisionTheme {
-        BMIScreen(
-            onNavigateBack = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun BMIPreviewScreen(){
+//    NutriVisionTheme {
+//        BMIScreen(
+//            onNavigateBack = {}
+//        )
+//    }
+//}

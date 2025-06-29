@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.cloudinary.android)
+    implementation(libs.firebase.auth.ktx)
     kapt(libs.hilt.compiler)
     implementation (libs.converter.gson)
 

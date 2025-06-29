@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +22,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -36,6 +39,7 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.nutrivision.app.R
 import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.ui.theme.NutriVisionTheme
 import com.nutrivision.app.ui.viewmodel.AuthState
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
@@ -44,6 +48,7 @@ import com.nutrivision.app.ui.viewmodel.AuthViewModel
 fun ProfileScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToEditProfile: () -> Unit,
     authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -123,19 +128,23 @@ fun ProfileScreen(
             }
             Spacer(modifier = Modifier.height(40.dp))
 
-//            COMING SOON
-//            ProfileButton(
-//                text = "Go to Settings",
-//                icon = Icons.Default.Settings,
-//                onClick = {  }
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
+            ProfileButton(
+                text = "Edit Profile",
+                icon = Icons.Default.Edit,
+                onClick =  { onNavigateToEditProfile() },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
             ProfileButton(
                 text = "Log out",
                 icon = Icons.AutoMirrored.Filled.Logout,
                 onClick = {
                     authViewModel.logout()
-                }
+                },
+                containerColor = MaterialTheme.colorScheme.error,
+                contentColor = MaterialTheme.colorScheme.onError
             )
 
 
@@ -194,7 +203,10 @@ fun InfoItem(label: String, value: String) {
 fun ProfileButton(
     text: String,
     icon: ImageVector,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary
 ) {
     Button(
         onClick = onClick,
@@ -203,36 +215,20 @@ fun ProfileButton(
             .height(56.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-            contentColor = MaterialTheme.colorScheme.onErrorContainer
+            containerColor = containerColor,
+            contentColor = contentColor
         )
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
             Icon(
                 imageVector = icon,
-                contentDescription = text,
-                tint = Color.White
+                contentDescription = text
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = text,
-                color = Color.White,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
-        }
+
     }
 }
-
-
-//@Preview (showBackground = true)
-//@Composable
-//fun ProfilePreviewScreen() {
-//    NutriVisionTheme {
-//        ProfileScreen(
-//            onNavigateBack = {}
-//        )
-//    }
-//}

@@ -82,14 +82,11 @@ fun ScanScreen(
                     scannedValue = barcode
                 }
             }
-
             Spacer(modifier = Modifier.height(24.dp))
-
             if (scannedValue != null) {
                 LaunchedEffect(scannedValue) {
                     viewModel.fetchProductByBarcode(scannedValue.toString())
                 }
-
                 if (isLoading) {
                     CircularProgressIndicator()
                 } else {
@@ -209,6 +206,10 @@ fun BarcodeScannerScreen(
             }
         }
     }
+}
+
+fun rememberPermissionState(camera: String) {
+
 }
 
 private class BarcodeAnalyzer(

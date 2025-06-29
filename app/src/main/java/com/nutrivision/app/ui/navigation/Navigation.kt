@@ -32,6 +32,7 @@ private object Route {
 
     const val HISTORY = "history"
     const val BMI = "bmi"
+    const val EDIT_PROFILE = "edit_profile"
 }
 
 sealed class TopLevelDestination(
@@ -71,6 +72,7 @@ sealed class Screen(val route: String) {
         object History : Screen(Route.HISTORY)
         object BMI : Screen(Route.BMI)
         object Detail : Screen(Route.DETAIL)
+        object EditProfile : Screen(Route.EDIT_PROFILE)
     }
 
 }
