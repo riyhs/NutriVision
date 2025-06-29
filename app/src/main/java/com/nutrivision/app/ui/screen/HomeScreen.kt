@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
@@ -111,12 +112,16 @@ fun Header(user: User?) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column(
+            modifier = Modifier.weight(0.8.toFloat()),
+        ) {
             Text(
                 text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = "Tap. Scan. Stay healthy.",
@@ -128,6 +133,7 @@ fun Header(user: User?) {
             painter = painter,
             contentDescription = "User Avatar",
             modifier = Modifier
+                .weight(0.2.toFloat())
                 .size(60.dp)
                 .clip(CircleShape)
         )
