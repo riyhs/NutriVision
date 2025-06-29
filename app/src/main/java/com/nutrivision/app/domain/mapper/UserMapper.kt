@@ -11,8 +11,8 @@ fun UserProfile.toDomain(): User {
         email = this.email,
         age = this.age ?: 0,
         gender = this.gender ?: "",
-        height = this.height ?: 0,
-        weight = this.weight ?: 0,
+        height = this.height ?: 0.toFloat(),
+        weight = this.weight ?: 0.toFloat(),
         photoUrl = this.photoUrl
     )
 }

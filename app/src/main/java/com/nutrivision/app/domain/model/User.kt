@@ -6,7 +6,7 @@ data class User (
     val email: String,
     val age: Int,
     val gender: String,
-    val height: Int,
-    val weight: Int,
+    val height: Float,
+    val weight: Float,
     val photoUrl: String? = null
 )

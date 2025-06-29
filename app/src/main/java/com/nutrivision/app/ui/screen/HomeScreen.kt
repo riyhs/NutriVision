@@ -48,6 +48,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.utils.BMI.calculateBMI
 import com.nutrivision.app.utils.NutritionTips
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,7 +63,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val userProfile by authViewModel.user.collectAsState()
+    val user by authViewModel.user.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -77,7 +78,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             
-            Header(userProfile)
+            Header(user)
             Spacer(modifier = Modifier.height(24.dp))
 
             BMIDisplayCard()
@@ -89,7 +90,7 @@ fun HomeScreen(
             ActionButtons(onNavigateToBMI = onNavigateToBMI,onNavigateToHistory = onNavigateToHistory)
             Spacer(modifier = Modifier.height(24.dp))
 
-            NutritionTipCard()
+            NutritionTipCard(user)
 
         }
     }
@@ -314,7 +315,7 @@ fun ActionButton(
 }
 
 @Composable
-fun NutritionTipCard() {
+fun NutritionTipCard(user: User?) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -340,8 +341,14 @@ fun NutritionTipCard() {
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 16.sp
                 )
+
+                var tipsText = "Eating colorful vegetables ensures a wide range of nutrients"
+                if (user?.weight != 0.toFloat() && user?.height != 0.toFloat() && user != null) {
+                    tipsText = NutritionTips.getRandomTipBasedOnBMI(calculateBMI(user.weight, user.height))
+                }
+
                 Text(
-                    text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
+                    text = tipsText,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp
