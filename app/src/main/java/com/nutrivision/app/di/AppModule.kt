@@ -9,7 +9,10 @@ import com.nutrivision.app.BuildConfig
 import com.nutrivision.app.data.local.AppDatabase
 import com.nutrivision.app.data.local.ScanHistoryDao
 import com.nutrivision.app.data.remote.ApiService
-import com.nutrivision.app.data.repository.ScanRepository
+import com.nutrivision.app.data.repository.AuthRepositoryImpl
+import com.nutrivision.app.data.repository.ScanRepositoryImpl
+import com.nutrivision.app.domain.repository.AuthRepository
+import com.nutrivision.app.domain.repository.ScanRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,32 +37,25 @@ object AppModule {
             .create(ApiService::class.java)
     }
 
+    // REPOSITORY
     @Provides
     @Singleton
     fun provideScanRepository(
         apiService: ApiService,
         scanHistoryDao: ScanHistoryDao
     ): ScanRepository {
-        return ScanRepository(apiService, scanHistoryDao)
-    }
-
-    // DATA LOCAL
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            AppDatabase::class.java,
-            "scan_history_database"
-        )
-            .fallbackToDestructiveMigration(true)
-            .build()
+        return ScanRepositoryImpl(apiService, scanHistoryDao)
     }
 
     @Provides
     @Singleton
-    fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
-        return appDatabase.scanHistoryDao()
+    fun provideAuthRepository(
+        @ApplicationContext context: Context,
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore,
+        cloudinary: Cloudinary
+    ): AuthRepository {
+        return AuthRepositoryImpl(context, auth, firestore, cloudinary)
     }
 
     // FIREBASE
@@ -82,5 +78,24 @@ object AppModule {
             "secure" to true
         )
         return Cloudinary(config)
+    }
+
+    // DATA LOCAL
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "scan_history_database"
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideScanHistoryDao(appDatabase: AppDatabase): ScanHistoryDao {
+        return appDatabase.scanHistoryDao()
     }
 }

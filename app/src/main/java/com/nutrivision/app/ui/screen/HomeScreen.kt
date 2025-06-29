@@ -46,8 +46,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import coil.compose.rememberAsyncImagePainter
 import com.nutrivision.app.R
-import com.nutrivision.app.data.model.UserProfile
+import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.utils.NutritionTips
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -61,7 +62,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val userProfile by authViewModel.userProfile.collectAsState()
+    val userProfile by authViewModel.user.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -95,9 +96,9 @@ fun HomeScreen(
 }
 
 @Composable
-fun Header(userProfile: UserProfile?) {
-    val painter = if (userProfile?.photoUrl != null) {
-        rememberAsyncImagePainter(userProfile.photoUrl)
+fun Header(user: User?) {
+    val painter = if (user?.photoUrl != null) {
+        rememberAsyncImagePainter(user.photoUrl)
     } else {
         painterResource(id = R.drawable.ambaronald)
     }
@@ -109,7 +110,7 @@ fun Header(userProfile: UserProfile?) {
     ) {
         Column {
             Text(
-                text = "Hello, ${userProfile?.displayName ?: "Nutrifans"}!",
+                text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primaryContainer
@@ -340,7 +341,7 @@ fun NutritionTipCard() {
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Eating colorful vegetables ensures a wide range of nutrients",
+                    text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp

@@ -39,7 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.nutrivision.app.data.local.entity.ScanHistoryItem
+import com.nutrivision.app.domain.model.Product
 import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 @Composable
@@ -85,7 +85,7 @@ fun HistoryScreen(
                         HistoryItemCard(
                             historyItem = historyItem,
                             onClick = {
-                                onNavigateToDetail(historyItem.productCode)
+                                onNavigateToDetail(historyItem.code)
                             }
                         )
                     }
@@ -132,7 +132,7 @@ fun HistoryScreen(
 
 @Composable
 fun HistoryItemCard(
-    historyItem: ScanHistoryItem,
+    historyItem: Product,
     onClick: () -> Unit
 ) {
     Card(
@@ -178,7 +178,7 @@ fun HistoryItemCard(
                         Text("No Image", style = MaterialTheme.typography.labelSmall)
                     }
                 },
-                contentDescription = "Image of ${historyItem.productName}",
+                contentDescription = "Image of ${historyItem.name}",
             )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -189,15 +189,13 @@ fun HistoryItemCard(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = historyItem.productName,
+                    text = historyItem.name,
                     style = MaterialTheme.typography.headlineSmall
                 )
-                if (!historyItem.productBrand.isNullOrBlank()) {
                     Text(
-                        text = historyItem.productBrand,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                    text = historyItem.brand ?: "Nama merek tidak tersedia",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

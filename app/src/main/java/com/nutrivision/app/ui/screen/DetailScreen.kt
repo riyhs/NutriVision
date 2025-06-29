@@ -88,9 +88,8 @@ fun DetailScreen(
                 }
             }
             productResponseState != null  -> {
-                val actualProductResponse = productResponseState!!
-                val product = actualProductResponse.product
-                val imageUrl = getImageUrl(actualProductResponse.code)
+                val product = productResponseState!!
+                val imageUrl = getImageUrl(product.code)
 
                 Column(
                     modifier = Modifier
@@ -106,7 +105,7 @@ fun DetailScreen(
                                 .crossfade(true)
                                 .error(android.R.drawable.ic_menu_gallery)
                                 .build(),
-                            contentDescription = "Gambar ${product.productName}",
+                            contentDescription = "Gambar ${product.name}",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp)
@@ -139,107 +138,101 @@ fun DetailScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = product.productName,
+                        text = product.name,
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
 
-                    val brandText = product.brandsTags.firstOrNull()
-                        ?.split(":")?.getOrNull(1)?.replace("-", " ")?.trim()
-                        ?: ""
-                    if (brandText.isNotBlank()) {
-                        Text(
-                            text = brandText,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            textAlign = TextAlign.Center
+                    val brandText = product.brand
+                    Text(
+                        text = brandText ?: "Nama merek tidak tersedia",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-
-
-                    product.nutriments.let { nutriments ->
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                "Informasi Nutrisi (per saji)",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(bottom = 8.dp)
                             )
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    "Informasi Nutrisi (per saji)",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                )
-                                NutrientRow(
-                                    "Energi",
-                                    nutriments.energyKcalServing.toString().toDoubleOrNull(),
-                                    "kcal"
-                                )
-                                NutrientRow(
-                                    "Lemak",
-                                    nutriments.fatServing.toString().toDoubleOrNull(),
-                                    "g"
-                                )
-                                NutrientRow(
-                                    "   Lemak Jenuh",
-                                    nutriments.saturatedFatServing.toString().toDoubleOrNull(),
-                                    "g",
-                                    isSubEntry = true
-                                )
-                                NutrientRow(
-                                    "Karbohidrat",
-                                    nutriments.carbohydratesServing.toString().toDoubleOrNull(),
-                                    "g"
-                                )
-                                NutrientRow(
-                                    "   Gula",
-                                    nutriments.sugarsServing.toString().toDoubleOrNull(),
-                                    "g",
-                                    isSubEntry = true
-                                )
-                                NutrientRow(
-                                    "Protein",
-                                    nutriments.proteinsServing.toString().toDoubleOrNull(),
-                                    "g"
-                                )
-                                NutrientRow(
-                                    "Serat",
-                                    nutriments.fiberServing.toString().toDoubleOrNull(),
-                                    "g"
-                                )
-                                NutrientRow(
-                                    "Garam",
-                                    nutriments.saltServing.toString().toDoubleOrNull(),
-                                    "g"
-                                )
-                            }
+                            NutrientRow(
+                                "Energi",
+                                product.energyKcal.toString().toDoubleOrNull(),
+                                "kcal"
+                            )
+                            NutrientRow(
+                                "Lemak",
+                                product.fat.toString().toDoubleOrNull(),
+                                "g"
+                            )
+                            NutrientRow(
+                                "   Lemak Jenuh",
+                                product.saturatedFat.toString().toDoubleOrNull(),
+                                "g",
+                                isSubEntry = true
+                            )
+                            NutrientRow(
+                                "Karbohidrat",
+                                product.carbohydrates.toString().toDoubleOrNull(),
+                                "g"
+                            )
+                            NutrientRow(
+                                "   Gula",
+                                product.sugars.toString().toDoubleOrNull(),
+                                "g",
+                                isSubEntry = true
+                            )
+                            NutrientRow(
+                                "Protein",
+                                product.proteins.toString().toDoubleOrNull(),
+                                "g"
+                            )
+                            NutrientRow(
+                                "Serat",
+                                product.fiber.toString().toDoubleOrNull(),
+                                "g"
+                            )
+                            NutrientRow(
+                                "Garam",
+                                product.salt.toString().toDoubleOrNull(),
+                                "g"
+                            )
                         }
                     }
 
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    if (product.nutritionGrades.isNotBlank() && product.nutritionGrades != "?") {
+                    if (product.nutriscore != null && product.nutriscore != "?") {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 "Skor Nutri: ",
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = product.nutritionGrades,
+                                text = product.nutriscore,
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
-                                color = getNutriScoreColor(product.nutritionGrades)
+                                color = getNutriScoreColor(product.nutriscore)
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Kode Produk: ${actualProductResponse.code}",
+                            text = "Kode Produk: ${product.code}",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
