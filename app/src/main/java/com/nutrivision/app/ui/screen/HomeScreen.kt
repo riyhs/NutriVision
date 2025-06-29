@@ -102,7 +102,7 @@ fun Header(user: User?) {
     val painter = if (user?.photoUrl != null) {
         rememberAsyncImagePainter(user.photoUrl)
     } else {
-        painterResource(id = R.drawable.ambaronald)
+        painterResource(id = R.drawable.profile)
     }
 
     Row(
@@ -194,7 +194,7 @@ fun BMIDisplayCard(user: User?) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Height: ${user?.height} cm",
+                text = "Tinggi badan: ${user?.height} cm",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 12.sp
             )
@@ -285,7 +285,7 @@ fun ActionButtons(
         )
         Spacer(modifier = Modifier.width(16.dp))
         ActionButton(
-            text = "Lihat Riwayat",
+            text = "Riwayat Scan",
             icon = Icons.Filled.History,
             onClick = { onNavigateToHistory() },
             modifier = Modifier.weight(1f)
@@ -355,7 +355,7 @@ fun NutritionTipCard(user: User?) {
                     fontSize = 16.sp
                 )
 
-                var tipsText = "Eating colorful vegetables ensures a wide range of nutrients"
+                var tipsText = "Konsumsi sayuran untuk memastikan kebutuhan nutrisi tercukupi"
                 if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
                     val bmiCategory = getBmiCategory(calculateBMI(user.weight, user.height), user.gender)
                     tipsText = NutritionTips.getRandomTipBasedOnBMI(bmiCategory)

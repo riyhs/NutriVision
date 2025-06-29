@@ -159,7 +159,7 @@ fun ProfileImage(
     val painter = if (user?.photoUrl != null) {
         rememberAsyncImagePainter(user.photoUrl)
     } else {
-        painterResource(id = R.drawable.ambaronald)
+        painterResource(id = R.drawable.profile)
     }
 
     Image(
@@ -178,6 +178,15 @@ fun ProfileImage(
                 profileImageClicked()
             }
     )
+
+    if (user?.photoUrl == null) {
+        Text(
+            text = "Ketuk untuk mengubah foto profil",
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+            fontSize = 14.sp,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
 }
 
 @Composable
