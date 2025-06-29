@@ -113,7 +113,7 @@ fun Header(user: User?) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
-            modifier = Modifier.weight(0.8.toFloat()),
+            modifier = Modifier.weight(0.7.toFloat()),
         ) {
             Text(
                 text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
@@ -133,7 +133,6 @@ fun Header(user: User?) {
             painter = painter,
             contentDescription = "User Avatar",
             modifier = Modifier
-                .weight(0.2.toFloat())
                 .size(60.dp)
                 .clip(CircleShape)
         )
