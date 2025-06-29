@@ -87,7 +87,7 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Register",
+                    text = "Daftar",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -97,7 +97,7 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Join now and start living healthier!",
+                    text = "Gabung sekarang dan mulai hidup lebih sehat!",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Start
@@ -109,7 +109,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it; nameError = null },
-                label = { Text("Name") },
+                label = { Text("Nama") },
                 placeholder = { Text("") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -144,7 +144,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it; emailError = null },
-                label = { Text("E-Mail") },
+                label = { Text("Email") },
                 placeholder = { Text("example@gmail.com") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -179,7 +179,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it; passwordError = null },
-                label = { Text("Password") },
+                label = { Text("Kata Sandi") },
                 placeholder = { Text("") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -208,7 +208,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it; confirmPasswordError = null },
-                label = { Text("Confirm Password") },
+                label = { Text("Konfirmasi Kata Sandi") },
                 placeholder = { Text("") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -240,10 +240,10 @@ fun RegisterScreen(
                 onClick = {
                     focusManager.clearFocus()
                     var isValid = true
-                    if (name.isBlank()) { nameError = "Name cannot be empty"; isValid = false }
-                    if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { emailError = "Enter a valid email"; isValid = false }
-                    if (password.length < 6) { passwordError = "Password must be at least 6 characters"; isValid = false }
-                    if (password != confirmPassword) { confirmPasswordError = "Passwords do not match"; isValid = false }
+                    if (name.isBlank()) { nameError = "Nama tidak boleh kosong"; isValid = false }
+                    if (email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { emailError = "Masukkan Email yang valid"; isValid = false }
+                    if (password.length < 6) { passwordError = "Kata Sandi harus berisi minimal 6 karakter"; isValid = false }
+                    if (password != confirmPassword) { confirmPasswordError = "Kata sandi tidak cocok"; isValid = false }
 
                     if (isValid) {
                         authViewModel.signup(name, email, password)
@@ -264,7 +264,7 @@ fun RegisterScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Register",
+                        text = "Daftar",
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
@@ -277,7 +277,7 @@ fun RegisterScreen(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 TextButton(onClick = { onNavigateBack() }) {
                     Text(
-                        text = "Already registered?",
+                        text = "Sudah terdaftar?",
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp
                     )

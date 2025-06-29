@@ -113,12 +113,12 @@ fun Header(user: User?) {
                 text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "Tap. Scan. Stay healthy.",
+                text = "Cek Gizi, Sehat Pasti.",
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
             )
         }
         Image(
@@ -147,8 +147,8 @@ fun BMIDisplayCard() {
         ) {
 
             Text(
-                text = "Your Health Overview",
-                color = MaterialTheme.colorScheme.onPrimary,
+                text = "Ringkasan Kesehatan",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -163,14 +163,14 @@ fun BMIDisplayCard() {
 
                 MetricDisplay(
                     value = "23.5",
-                    label = "Current BMI",
-                    subLabel = "Normal Weight",
+                    label = "BMI Saat ini",
+                    subLabel = "BB Normal",
                     modifier = Modifier.weight(1f),
                 )
 
                 MetricDisplay(
                     value = "75 kg",
-                    label = "Current Weight",
+                    label = "Berat Badanmu",
                     subLabel = "",
                     modifier = Modifier.weight(1f),
                     valueFontSize = 30.sp
@@ -180,9 +180,9 @@ fun BMIDisplayCard() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Height: 178 cm  ·  Updated 2 days ago",
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 14.sp
+                text = "Tingi Badan: 178 cm  ·  Diperbarui 2 hari yang lalu",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontSize = 12.sp
             )
         }
     }
@@ -203,7 +203,7 @@ fun MetricDisplay(
 
         Text(
             text = value,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = valueFontSize,
             fontWeight = FontWeight.Bold,
             lineHeight = (valueFontSize.value * 1.1).sp
@@ -211,7 +211,7 @@ fun MetricDisplay(
 
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
@@ -219,7 +219,7 @@ fun MetricDisplay(
         if (subLabel.isNotEmpty()) {
             Text(
                 text = subLabel,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 16.sp
             )
         }
@@ -242,12 +242,12 @@ fun ScanButton(
         Icon(
             imageVector = Icons.Filled.PhotoCamera ,
             contentDescription = "Scan Icon",
-            tint = MaterialTheme.colorScheme.onPrimary
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Scan now!",
-            color = MaterialTheme.colorScheme.onPrimary,
+            text = "Scan Yuk!",
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -264,14 +264,14 @@ fun ActionButtons(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ActionButton(
-            text = "Calculate BMI",
+            text = "Kalkulator BMI",
             icon = Icons.Filled.Calculate,
             onClick = { onNavigateToBMI() },
             modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.width(16.dp))
         ActionButton(
-            text = "View History",
+            text = "Lihat Riwayat",
             icon = Icons.Filled.History,
             onClick = { onNavigateToHistory() },
             modifier = Modifier.weight(1f)
@@ -299,13 +299,13 @@ fun ActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = text,
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(28.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = text,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
@@ -329,20 +329,20 @@ fun NutritionTipCard() {
             Icon(
                 imageVector = Icons.Filled.Lightbulb,
                 contentDescription = "Nutrition Tip",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
-                    text = "Daily Nutrition Tip",
+                    text = "Tips Nutrisi Harian",
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                     fontSize = 16.sp
                 )
                 Text(
                     text = NutritionTips.getRandomTipBasedOnBMI(20.0), // TODO: Change param to dynamic
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.9f),
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 )
