@@ -1,13 +1,8 @@
 package com.nutrivision.app.ui.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -18,9 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,33 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nutrivision.app.ui.component.GenderSelectorButton
 import com.nutrivision.app.ui.theme.NutriVisionTheme
-
-
-enum class Gender {
-    MALE, FEMALE
-}
-private fun getBmiCategory(bmi: Float, gender: Gender): String {
-    return when (gender) {
-        Gender.FEMALE -> {
-            // Standar Asia-Pasifik (lebih ketat untuk overweight) untuk para ciwi
-            when {
-                bmi < 18.5f -> "Underweight (Kurus)"
-                bmi < 23.0f -> "Normal weight (Normal)"
-                bmi < 25.0f -> "Overweight (Kelebihan berat badan)"
-                else -> "Obesity (Obesitas)"
-            }
-        }
-        Gender.MALE -> {
-            // Standar Internasional WHO untuk lanang
-            when {
-                bmi < 18.5f -> "Underweight (Kurus)"
-                bmi < 25.0f -> "Normal weight (Normal)"
-                bmi < 30.0f -> "Overweight (Kelebihan berat badan)"
-                else -> "Obesity (Obesitas)"
-            }
-        }
-    }
-}
+import com.nutrivision.app.utils.BMI.calculateBMI
+import com.nutrivision.app.utils.BMI.getBmiCategory
+import com.nutrivision.app.utils.Gender
 
 
 @Composable
@@ -150,9 +119,7 @@ fun BMIScreen(
                     val heightValue = height.toFloatOrNull()
 
                     if (selectedGender != null && weightValue != null && heightValue != null && heightValue > 0) {
-                        val heightInMeters = heightValue / 100
-                        val bmi = weightValue / (heightInMeters * heightInMeters)
-                        bmiResult = bmi
+                        bmiResult = calculateBMI(weightValue, heightValue)
                         showResultDialog = true
                     } else {
                         Toast.makeText(context, "Harap pilih gender dan isi semua data dengan benar.", Toast.LENGTH_SHORT).show()
