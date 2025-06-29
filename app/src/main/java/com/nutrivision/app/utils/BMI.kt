@@ -1,7 +1,18 @@
 package com.nutrivision.app.utils
 
+import android.util.Log
+import java.text.DecimalFormat
+
 enum class Gender {
-    MALE, FEMALE
+    MALE, FEMALE, NODATA
+}
+
+enum class BmiCategory(val description: String) {
+    UNDERWEIGHT("Underweight (Kurus)"),
+    NORMAL("Normal weight (Normal)"),
+    OVERWEIGHT("Overweight (Kelebihan berat badan)"),
+    OBESITY("Obesity (Obesitas)"),
+    NULL("Tidak ada data")
 }
 
 object BMI {
@@ -15,7 +26,10 @@ object BMI {
             bmi = weightValue.toFloat() / (heightInMeters * heightInMeters).toFloat()
         }
 
-        return bmi
+        val df: DecimalFormat = DecimalFormat("#.#")
+        val finalBMI = df.format(bmi).toFloat()
+
+        return finalBMI
     }
 
     fun getBmiCategory(bmi: Float, gender: Gender): String {
@@ -23,20 +37,27 @@ object BMI {
             Gender.FEMALE -> {
                 // Standar Asia-Pasifik (lebih ketat untuk overweight) untuk para ciwi
                 when {
-                    bmi < 18.5f -> "Underweight (Kurus)"
-                    bmi < 23.0f -> "Normal weight (Normal)"
-                    bmi < 25.0f -> "Overweight (Kelebihan berat badan)"
-                    else -> "Obesity (Obesitas)"
+                    bmi < 18.5f -> BmiCategory.UNDERWEIGHT.description
+                    bmi < 23.0f -> BmiCategory.NORMAL.description
+                    bmi < 25.0f -> BmiCategory.OVERWEIGHT.description
+                    else -> BmiCategory.OBESITY.description
                 }
             }
 
             Gender.MALE -> {
                 // Standar Internasional WHO untuk lanang
                 when {
-                    bmi < 18.5f -> "Underweight (Kurus)"
-                    bmi < 25.0f -> "Normal weight (Normal)"
-                    bmi < 30.0f -> "Overweight (Kelebihan berat badan)"
-                    else -> "Obesity (Obesitas)"
+                    bmi < 18.5f -> BmiCategory.UNDERWEIGHT.description
+                    bmi < 25.0f -> BmiCategory.NORMAL.description
+                    bmi < 30.0f -> BmiCategory.OVERWEIGHT.description
+                    else -> BmiCategory.OBESITY.description
+                }
+            }
+
+            Gender.NODATA -> {
+                Log.d("BMI", "Gender data not available")
+                when {
+                    else -> BmiCategory.NULL.description
                 }
             }
         }

@@ -49,6 +49,8 @@ import com.nutrivision.app.R
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.ui.viewmodel.AuthViewModel
 import com.nutrivision.app.utils.BMI.calculateBMI
+import com.nutrivision.app.utils.BMI.getBmiCategory
+import com.nutrivision.app.utils.Gender
 import com.nutrivision.app.utils.NutritionTips
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,11 +79,11 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            
+            Spacer(modifier = Modifier.height(32.dp))
             Header(user)
             Spacer(modifier = Modifier.height(24.dp))
 
-            BMIDisplayCard()
+            BMIDisplayCard(user)
             Spacer(modifier = Modifier.height(24.dp))
 
             ScanButton(onNavigateToScan = onNavigateToScan)
@@ -91,7 +93,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             NutritionTipCard(user)
-
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -133,7 +135,7 @@ fun Header(user: User?) {
 }
 
 @Composable
-fun BMIDisplayCard() {
+fun BMIDisplayCard(user: User?) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -161,16 +163,24 @@ fun BMIDisplayCard() {
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
+                var bmi = 0.0.toFloat()
+                var category = "Tidak ada data"
 
+                if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
+                    if (user.gender != Gender.NODATA) {
+                        bmi = calculateBMI(user.weight, user.height)
+                        category = getBmiCategory(bmi, user.gender)
+                    }
+                }
                 MetricDisplay(
-                    value = "23.5",
+                    value = bmi.toString(),
                     label = "Current BMI",
-                    subLabel = "Normal Weight",
+                    subLabel = category,
                     modifier = Modifier.weight(1f),
                 )
 
                 MetricDisplay(
-                    value = "75 kg",
+                    value = user?.weight.toString() + " kg",
                     label = "Current Weight",
                     subLabel = "",
                     modifier = Modifier.weight(1f),
@@ -181,7 +191,7 @@ fun BMIDisplayCard() {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Height: 178 cm  ·  Updated 2 days ago",
+                text = "Height: ${user?.height} cm",
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp
             )
@@ -343,8 +353,9 @@ fun NutritionTipCard(user: User?) {
                 )
 
                 var tipsText = "Eating colorful vegetables ensures a wide range of nutrients"
-                if (user?.weight != 0.toFloat() && user?.height != 0.toFloat() && user != null) {
-                    tipsText = NutritionTips.getRandomTipBasedOnBMI(calculateBMI(user.weight, user.height))
+                if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
+                    val bmiCategory = getBmiCategory(calculateBMI(user.weight, user.height), user.gender)
+                    tipsText = NutritionTips.getRandomTipBasedOnBMI(bmiCategory)
                 }
 
                 Text(

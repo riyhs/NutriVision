@@ -54,12 +54,12 @@ object NutritionTips {
     )
 
 
-    fun getRandomTipBasedOnBMI(bmi: Float): String {
-        return when {
-            bmi < 18.5 -> underweightTips.random()
-            bmi >= 18.5 && bmi < 25.0 -> normalWeightTips.random()
-            bmi >= 25.0 && bmi < 30.0 -> overweightTips.random()
-            bmi >= 30.0 -> obesityTips.random()
+    fun getRandomTipBasedOnBMI(category: String): String {
+        return when (category) {
+            BmiCategory.UNDERWEIGHT.description -> underweightTips.random()
+            BmiCategory.NORMAL.description -> normalWeightTips.random()
+            BmiCategory.OVERWEIGHT.description -> overweightTips.random()
+            BmiCategory.OBESITY.description -> obesityTips.random()
             else -> "Invalid BMI value. Please provide a positive number for BMI."
         }
     }
