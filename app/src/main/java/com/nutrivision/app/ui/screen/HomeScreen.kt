@@ -53,8 +53,6 @@ import com.nutrivision.app.utils.BMI.calculateBMI
 import com.nutrivision.app.utils.BMI.getBmiCategory
 import com.nutrivision.app.utils.Gender
 import com.nutrivision.app.utils.NutritionTips
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
@@ -120,7 +118,7 @@ fun Header(user: User?) {
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
