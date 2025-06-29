@@ -2,12 +2,9 @@ package com.nutrivision.app.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nutrivision.app.data.local.entity.ScanHistoryItem
-import com.nutrivision.app.data.remote.response.ProductResponse
-import com.nutrivision.app.data.repository.ScanRepository
+import com.nutrivision.app.data.repository.ScanRepositoryImpl
 import com.nutrivision.app.domain.model.Product
-import com.nutrivision.app.utils.Utils
-import com.nutrivision.app.utils.Utils.capitalizeWords
+import com.nutrivision.app.domain.repository.ScanRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
