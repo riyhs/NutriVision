@@ -23,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,13 +30,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
-import com.nutrivision.app.ui.theme.NutriVisionTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -85,9 +81,6 @@ fun HomeScreen(
             BMIDisplayCard(user)
             Spacer(modifier = Modifier.height(24.dp))
 
-            ScanButton(onNavigateToScan = onNavigateToScan)
-            Spacer(modifier = Modifier.height(24.dp))
-
             ActionButtons(onNavigateToBMI = onNavigateToBMI,onNavigateToHistory = onNavigateToHistory)
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -102,7 +95,7 @@ fun Header(user: User?) {
     val painter = if (user?.photoUrl != null) {
         rememberAsyncImagePainter(user.photoUrl)
     } else {
-        painterResource(id = R.drawable.ambaronald)
+        painterResource(id = R.drawable.profile)
     }
 
     Row(
@@ -114,7 +107,7 @@ fun Header(user: User?) {
             modifier = Modifier.weight(0.7.toFloat()),
         ) {
             Text(
-                text = "Hello, ${user?.displayName ?: "Nutrifans"}!",
+                text = "Halo, ${user?.displayName ?: "Nutrifans"}!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
@@ -194,7 +187,7 @@ fun BMIDisplayCard(user: User?) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Height: ${user?.height} cm",
+                text = "Tinggi badan: ${user?.height} cm",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = 12.sp
             )
@@ -240,34 +233,6 @@ fun MetricDisplay(
     }
 }
 
-
-@Composable
-fun ScanButton(
-    onNavigateToScan: () -> Unit
-) {
-    Button(
-        onClick = {  onNavigateToScan()  },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-    ) {
-        Icon(
-            imageVector = Icons.Filled.PhotoCamera ,
-            contentDescription = "Scan Icon",
-            tint = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = "Scan Yuk!",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
 @Composable
 fun ActionButtons(
     onNavigateToBMI: () -> Unit,
@@ -285,7 +250,7 @@ fun ActionButtons(
         )
         Spacer(modifier = Modifier.width(16.dp))
         ActionButton(
-            text = "Lihat Riwayat",
+            text = "Riwayat Scan",
             icon = Icons.Filled.History,
             onClick = { onNavigateToHistory() },
             modifier = Modifier.weight(1f)
@@ -355,7 +320,7 @@ fun NutritionTipCard(user: User?) {
                     fontSize = 16.sp
                 )
 
-                var tipsText = "Eating colorful vegetables ensures a wide range of nutrients"
+                var tipsText = "Konsumsi sayuran untuk memastikan kebutuhan nutrisi tercukupi"
                 if (user != null && user.weight != 0.toFloat() && user.height != 0.toFloat() && user.gender != null) {
                     val bmiCategory = getBmiCategory(calculateBMI(user.weight, user.height), user.gender)
                     tipsText = NutritionTips.getRandomTipBasedOnBMI(bmiCategory)

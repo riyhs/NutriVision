@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -26,7 +25,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nutrivision.app.ui.viewmodel.AuthState
@@ -45,15 +43,15 @@ fun LoginScreen(
 
     val focusManager = LocalFocusManager.current
     val localContext = LocalContext.current
-    val authState = authViewModel.authState.collectAsState()
+    val authState by authViewModel.authState.collectAsState()
 
-    LaunchedEffect(authState.value) {
-        when (authState.value) {
+    LaunchedEffect(authState) {
+        when (val state = authState) {
             is AuthState.Authenticated -> onNavigateToHome()
             is AuthState.Error -> {
                 Toast.makeText(
                     localContext,
-                    (authState.value as AuthState.Error).message,
+                    state.message,
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -165,7 +163,7 @@ fun LoginScreen(
                 onClick = {
                     authViewModel.login(email, password)
                 },
-                enabled = authState.value != AuthState.Loading, // TODO: Still not works
+                enabled = authState != AuthState.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -179,12 +177,19 @@ fun LoginScreen(
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Masuk",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    if (authState == AuthState.Loading) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "Masuk",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
 
@@ -204,12 +209,3 @@ fun LoginScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun LoginScreenPreview() {
-//    LoginScreen(
-//        onNavigateToHome = {},
-//        onNavigateToRegister = {}
-//    )
-//}

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nutrivision.app.ui.viewmodel.AuthState
@@ -52,15 +51,15 @@ fun RegisterScreen(
 
     val focusManager = LocalFocusManager.current
     val localContext = LocalContext.current
-    val authState = authViewModel.authState.collectAsState()
+    val authState by authViewModel.authState.collectAsState()
 
-    LaunchedEffect(authState.value) {
-        when (authState.value) {
+    LaunchedEffect(authState) {
+        when (val state = authState) {
             is AuthState.Authenticated -> onNavigateToHome()
             is AuthState.Error -> {
                 Toast.makeText(
                     localContext,
-                    (authState.value as AuthState.Error).message,
+                    state.message,
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -249,7 +248,7 @@ fun RegisterScreen(
                         authViewModel.signup(name, email, password)
                     }
                 },
-                enabled = authState.value != AuthState.Loading,
+                enabled = authState != AuthState.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -263,12 +262,19 @@ fun RegisterScreen(
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "Daftar",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    if (authState == AuthState.Loading) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "Daftar",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
 
@@ -287,14 +293,3 @@ fun RegisterScreen(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun RegisterScreenPreview() {
-//    MaterialTheme {
-//        RegisterScreen(
-//            onNavigateBack = { },
-//            onRegisterClicked = { _, _, _, _ -> }
-//        )
-//    }
-//}
