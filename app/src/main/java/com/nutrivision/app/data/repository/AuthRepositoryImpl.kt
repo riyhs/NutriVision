@@ -10,6 +10,7 @@ import com.nutrivision.app.domain.mapper.toDomain
 import com.nutrivision.app.domain.model.User
 import com.nutrivision.app.domain.repository.AuthRepository
 import com.nutrivision.app.domain.repository.AuthResult
+import com.nutrivision.app.utils.Gender
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +54,11 @@ class AuthRepositoryImpl @Inject constructor(
             val newUserProfile = UserProfile(
                 uid = firebaseUser.uid,
                 displayName = name,
-                email = firebaseUser.email ?: ""
+                email = firebaseUser.email ?: "",
+                gender = Gender.NODATA.name,
+                weight = 0.toFloat(),
+                height = 0.toFloat(),
+                age = 0
             )
             firestore.collection("users").document(firebaseUser.uid).set(newUserProfile).await()
             emit(AuthResult.Success(newUserProfile.toDomain()))
