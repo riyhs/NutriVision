@@ -80,7 +80,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Login",
+                    text = "Masuk",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -90,7 +90,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Welcome back! Let's get you healthier.",
+                    text = "Selamat datang kembali! Yuk, jadi lebih sehat!",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
                     textAlign = TextAlign.Start
@@ -103,7 +103,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("E-Mail") },
+                label = { Text("Email") },
                 placeholder = { Text("example@gmail.com") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -137,7 +137,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password") },
+                label = { Text("Kata Sandi") },
                 placeholder = { Text("") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -180,7 +180,7 @@ fun LoginScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Login",
+                        text = "Masuk",
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
@@ -193,7 +193,7 @@ fun LoginScreen(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 TextButton(onClick = {onNavigateToRegister()}) {
                     Text(
-                        text = "Not register yet?",
+                        text = "Belum mendaftar?",
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 14.sp
                     )

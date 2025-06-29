@@ -81,13 +81,13 @@ fun BMIScreen(
             ) {
                 GenderSelectorButton(
                     icon = Icons.Default.Face,
-                    label = "Male",
+                    label = "Pria",
                     isSelected = selectedGender == Gender.MALE,
                     onClick = { selectedGender = Gender.MALE }
                 )
                 GenderSelectorButton(
                     icon = Icons.Default.Face3,
-                    label = "Female",
+                    label = "Wanita",
                     isSelected = selectedGender == Gender.FEMALE,
                     onClick = { selectedGender = Gender.FEMALE }
                 )
@@ -97,19 +97,19 @@ fun BMIScreen(
             CustomInputField(
                 value = age,
                 onValueChange = { age = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
-                label = "Age (years)"
+                label = "Umur"
             )
             Spacer(modifier = Modifier.height(16.dp))
             CustomInputField(
                 value = weight,
                 onValueChange = { weight = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
-                label = "Weight (kg)"
+                label = "Berat Badan (kg)"
             )
             Spacer(modifier = Modifier.height(16.dp))
             CustomInputField(
                 value = height,
                 onValueChange = { height = it.filter { char -> char.isDigit() } }, // Hanya izinkan angka
-                label = "Height (cm)"
+                label = "Tinggi Badan (cm)"
             )
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -132,7 +132,7 @@ fun BMIScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Text(
-                    text = "Calculate",
+                    text = "Hitung",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer

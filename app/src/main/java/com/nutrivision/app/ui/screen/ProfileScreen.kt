@@ -128,7 +128,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             ProfileButton(
-                text = "Edit Profile",
+                text = "Ubah Profil",
                 icon = Icons.Default.Edit,
                 onClick =  { onNavigateToEditProfile() },
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -137,7 +137,7 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             ProfileButton(
-                text = "Log out",
+                text = "Keluar",
                 icon = Icons.AutoMirrored.Filled.Logout,
                 onClick = {
                     authViewModel.logout()
