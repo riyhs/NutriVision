@@ -58,23 +58,23 @@ This app is perfect for anyone conscious about their daily nutritional intake, f
 
 | Splash Screen                   | Login                            | Sign Up                          |
 | ------------------------------- | -------------------------------- | -------------------------------- |
-| ![](screenshots/1.png?raw=true) | ![](screenshots/2l.png?raw=true) | ![](screenshots/3l.png?raw=true) |
-|                                 | ![](screenshots/2d.png?raw=true) | ![](screenshots/3d.png?raw=true) |
+| ![](screenshots/1.jpg?raw=true) | ![](screenshots/2l.jpg?raw=true) | ![](screenshots/3l.jpg?raw=true) |
+|                                 | ![](screenshots/2d.jpg?raw=true) | ![](screenshots/3d.jpg?raw=true) |
 
 | Home                             | Scan                             | Detail Scan                      |
 | -------------------------------- | -------------------------------- | -------------------------------- |
-| ![](screenshots/4l.png?raw=true) | ![](screenshots/5l.png?raw=true) | ![](screenshots/6l.png?raw=true) |
-| ![](screenshots/4d.png?raw=true) | ![](screenshots/5d.png?raw=true) | ![](screenshots/6d.png?raw=true) |
+| ![](screenshots/4l.jpg?raw=true) | ![](screenshots/5l.jpg?raw=true) | ![](screenshots/6l.jpg?raw=true) |
+| ![](screenshots/4d.jpg?raw=true) | ![](screenshots/5d.jpg?raw=true) | ![](screenshots/6d.jpg?raw=true) |
 
 | Profile                          | Edit Profile                     | BMI                              |
 | -------------------------------- | -------------------------------- | -------------------------------- |
-| ![](screenshots/7l.png?raw=true) | ![](screenshots/8l.png?raw=true) | ![](screenshots/9l.png?raw=true) |
-| ![](screenshots/7d.png?raw=true) | ![](screenshots/8d.png?raw=true) | ![](screenshots/9d.png?raw=true) |
+| ![](screenshots/7l.jpg?raw=true) | ![](screenshots/8l.jpg?raw=true) | ![](screenshots/9l.jpg?raw=true) |
+| ![](screenshots/7d.jpg?raw=true) | ![](screenshots/8d.jpg?raw=true) | ![](screenshots/9d.jpg?raw=true) |
 
 | BMI Result                        | Scan History                      |     |
 | --------------------------------- | --------------------------------- | --- |
-| ![](screenshots/10l.png?raw=true) | ![](screenshots/11l.png?raw=true) |     |
-| ![](screenshots/10d.png?raw=true) | ![](screenshots/11d.png?raw=true) |     |
+| ![](screenshots/10l.jpg?raw=true) | ![](screenshots/11l.jpg?raw=true) |     |
+| ![](screenshots/10d.jpg?raw=true) | ![](screenshots/11d.jpg?raw=true) |     |
 
 
 ## Tech Stack & Architecture
