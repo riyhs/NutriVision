@@ -12,13 +12,19 @@
 </p>
 
 ## Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Contributors](#contributors)
 - [Features](#features)
-- [Schreenshots](#schreenshots)
-- [Tech Stack](#tech-stack)
+- [Screenshots](#screenshots)
+- [Tech Stack \& Architecture](#tech-stack--architecture)
 - [Getting Started](#getting-started)
-- [Architecture](#architecture)
+  - [Prerequisites](#prerequisites)
+  - [Installation \& Setup](#installation--setup)
+- [Architecture Overview](#architecture-overview)
+  - [1. Domain Layer](#1-domain-layer)
+  - [2. Data Layer](#2-data-layer)
+  - [3. UI (Presentation) Layer](#3-ui-presentation-layer)
 - [Acknowledgments](#acknowledgments)
 
 
@@ -50,17 +56,25 @@ This app is perfect for anyone conscious about their daily nutritional intake, f
 
 ## Screenshots 
 
-| Home                            |
-| ------------------------------- |
-| ![](screenshots/1.png?raw=true) |
+| Splash Screen                   | Login                            | Sign Up                          |
+| ------------------------------- | -------------------------------- | -------------------------------- |
+| ![](screenshots/1.png?raw=true) | ![](screenshots/2l.png?raw=true) | ![](screenshots/3l.png?raw=true) |
+|                                 | ![](screenshots/2d.png?raw=true) | ![](screenshots/3d.png?raw=true) |
 
-| Dashboard                       |
-| ------------------------------- |
-| ![](screenshots/2.png?raw=true) |
+| Home                             | Scan                             | Detail Scan                      |
+| -------------------------------- | -------------------------------- | -------------------------------- |
+| ![](screenshots/4l.png?raw=true) | ![](screenshots/5l.png?raw=true) | ![](screenshots/6l.png?raw=true) |
+| ![](screenshots/4d.png?raw=true) | ![](screenshots/5d.png?raw=true) | ![](screenshots/6d.png?raw=true) |
 
-| Photobooth                      |
-| ------------------------------- |
-| ![](screenshots/3.png?raw=true) |
+| Profile                          | Edit Profile                     | BMI                              |
+| -------------------------------- | -------------------------------- | -------------------------------- |
+| ![](screenshots/7l.png?raw=true) | ![](screenshots/8l.png?raw=true) | ![](screenshots/9l.png?raw=true) |
+| ![](screenshots/7d.png?raw=true) | ![](screenshots/8d.png?raw=true) | ![](screenshots/9d.png?raw=true) |
+
+| BMI Result                        | Scan History                      |     |
+| --------------------------------- | --------------------------------- | --- |
+| ![](screenshots/10l.png?raw=true) | ![](screenshots/11l.png?raw=true) |     |
+| ![](screenshots/10d.png?raw=true) | ![](screenshots/11d.png?raw=true) |     |
 
 
 ## Tech Stack & Architecture
