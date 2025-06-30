@@ -1,16 +1,23 @@
 package com.nutrivision.app.ui.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.nutrivision.app.ui.screen.BMIScreen
+import com.nutrivision.app.ui.screen.DetailScreen
+import com.nutrivision.app.ui.screen.EditProfileScreen
 import com.nutrivision.app.ui.screen.HistoryScreen
 import com.nutrivision.app.ui.screen.HomeScreen
 import com.nutrivision.app.ui.screen.ProfileScreen
 import com.nutrivision.app.ui.screen.ScanScreen
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
+import com.nutrivision.app.ui.viewmodel.ScanViewModel
 
 fun NavGraphBuilder.mainNavGraph(
+    authViewModel: AuthViewModel,
     navController: NavHostController
 ) {
     navigation(
@@ -26,32 +33,82 @@ fun NavGraphBuilder.mainNavGraph(
                 },
                 onNavigateToBMI = {
                     navController.navigate(Screen.Main.BMI.route)
-                }
+                },
+                onNavigateToScan = {
+                    navController.navigate(Screen.Main.Scan.route)
+                },
+                authViewModel = authViewModel
             )
         }
 
         composable(
             route = Screen.Main.Scan.route
-        ) {
-            ScanScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+        ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
+
+            ScanScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToDetail = { productCode ->
+                    navController.navigate("detail/$productCode")
+                },
+                viewModel = scanViewModel
+            )
         }
 
         composable(
             route = Screen.Main.Profile.route
         ) {
-            ProfileScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+            ProfileScreen(
+                authViewModel = authViewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(Screen.Main.route) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateToEditProfile = {
+                    navController.navigate(Screen.Main.EditProfile.route)
+                }
+            )
+        }
+
+        composable(
+            route = Screen.Main.EditProfile.route
+        ) {
+            EditProfileScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                authViewModel = authViewModel
+            )
         }
 
         composable(
             route = Screen.Main.History.route
-        ) {
-            HistoryScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+        ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
+
+            HistoryScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToDetail = { productCode ->
+                    navController.navigate("detail/$productCode")
+                },
+                viewModel = scanViewModel
+            )
         }
 
         composable(
@@ -60,6 +117,24 @@ fun NavGraphBuilder.mainNavGraph(
             BMIScreen(onNavigateBack = {
                 navController.navigateUp()
             })
+        }
+
+        composable(
+            route = Screen.Main.Detail.route
+        ) { backStackEntry ->
+            val mainNavGraphEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(Screen.Main.route)
+            }
+            val scanViewModel: ScanViewModel = hiltViewModel(mainNavGraphEntry)
+            val productCode = backStackEntry.arguments?.getString("productCode")
+
+            DetailScreen(
+                productCode = productCode,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                viewModel = scanViewModel
+            )
         }
 
         // route back to auth graph

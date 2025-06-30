@@ -25,7 +25,7 @@ fun BottomBar(
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
     ) {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()

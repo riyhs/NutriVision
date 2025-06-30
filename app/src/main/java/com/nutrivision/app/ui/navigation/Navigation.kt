@@ -1,16 +1,20 @@
 package com.nutrivision.app.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.nutrivision.app.R
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 
 private object Route {
@@ -24,9 +28,11 @@ private object Route {
     const val HOME = "home"
     const val SCAN = "scan"
     const val PROFILE = "profile"
+    const val DETAIL = "detail/{productCode}"
 
     const val HISTORY = "history"
     const val BMI = "bmi"
+    const val EDIT_PROFILE = "edit_profile"
 }
 
 sealed class TopLevelDestination(
@@ -53,18 +59,20 @@ sealed class Screen(val route: String) {
         object Scan : TopLevelDestination(
             route = Route.SCAN,
             title = R.string.scan,
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
+            selectedIcon = Icons.Filled.CameraAlt,
+            unselectedIcon = Icons.Outlined.CameraAlt
         )
         object Profile : TopLevelDestination(
             route = Route.PROFILE,
             title = R.string.profile,
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home
+            selectedIcon = Icons.Filled.Person,
+            unselectedIcon = Icons.Outlined.PersonOutline
         )
 
         object History : Screen(Route.HISTORY)
         object BMI : Screen(Route.BMI)
+        object Detail : Screen(Route.DETAIL)
+        object EditProfile : Screen(Route.EDIT_PROFILE)
     }
 
 }
@@ -73,14 +81,15 @@ sealed class Screen(val route: String) {
 fun RootNavHost(
     navController: NavHostController,
     startDestination: String = Screen.Auth.route,
+    authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        authNavGraph(navController)
-        mainNavGraph(navController)
+        authNavGraph(authViewModel, navController)
+        mainNavGraph(authViewModel, navController)
     }
 }
 
@@ -88,10 +97,12 @@ fun RootNavHost(
 fun RootNavGraph(
     navHostController: NavHostController,
     startDestination: String = Screen.Auth.route,
+    authViewModel: AuthViewModel
 ) {
     RootNavHost(
         navController = navHostController,
         startDestination = startDestination,
+        authViewModel = authViewModel,
         modifier = Modifier
     )
 }

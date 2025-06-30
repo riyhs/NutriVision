@@ -6,8 +6,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.nutrivision.app.ui.screen.LoginScreen
 import com.nutrivision.app.ui.screen.RegisterScreen
+import com.nutrivision.app.ui.viewmodel.AuthViewModel
 
 fun NavGraphBuilder.authNavGraph(
+    authViewModel: AuthViewModel,
     navController: NavHostController
 ) {
     navigation(
@@ -16,8 +18,9 @@ fun NavGraphBuilder.authNavGraph(
     ) {
         composable(
             route = Screen.Auth.Login.route
-        ) {
+        ) { backStackEntry ->
             LoginScreen(
+                authViewModel = authViewModel,
                 onNavigateToHome = {
                     navController.navigate(Screen.Main.route) {
                         popUpTo(Screen.Auth.route) {
@@ -33,10 +36,20 @@ fun NavGraphBuilder.authNavGraph(
 
         composable(
             route = Screen.Auth.Register.route
-        ) {
-            RegisterScreen(onNavigateBack = {
-                navController.navigateUp()
-            })
+        ) { backStackEntry ->
+            RegisterScreen(
+                authViewModel = authViewModel,
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                onNavigateToHome = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Auth.route) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
         }
     }
 }
